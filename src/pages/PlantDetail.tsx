@@ -86,15 +86,20 @@ export default function PlantDetail() {
 
       {/* Content */}
       <div className="container max-w-4xl mx-auto px-4 -mt-8">
-        {/* Title Card */}
-        <Card className="p-6 mb-6 shadow-lg">
-          <h1 className="text-3xl font-bold text-foreground mb-2">
+        {/* Title Section */}
+        <div className="bg-background rounded-t-3xl p-6 mb-4 shadow-lg">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
             {plant.common_name || "Unknown Plant"}
           </h1>
-          <p className="text-lg italic text-muted-foreground">
+          <p className="text-xl italic text-muted-foreground mb-4">
             {plant.scientific_name || "—"}
           </p>
-        </Card>
+          {plant.native_region && (
+            <span className="inline-block px-4 py-2 rounded-full bg-accent text-accent-foreground text-sm font-medium">
+              {plant.native_region}
+            </span>
+          )}
+        </div>
 
         {/* Info Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
