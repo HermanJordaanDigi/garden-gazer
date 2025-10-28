@@ -22,6 +22,7 @@ const seasonOptions = ["Spring", "Summer", "Autumn", "Winter"];
 export default function Index() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,
     sunExposure: undefined as string | undefined,
@@ -34,6 +35,31 @@ export default function Index() {
   });
 
   const { ref: loadMoreRef, inView } = useInView();
+
+  // Scroll detection for filters
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    
+    const handleScroll = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const scrollPosition = window.scrollY + window.innerHeight;
+        const pageHeight = document.documentElement.scrollHeight;
+        const distanceFromBottom = pageHeight - scrollPosition;
+        
+        // Show filters when within 800px from bottom
+        setShowFilters(distanceFromBottom < 800);
+      }, 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check initial position
+    
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   // Debounce search
   useEffect(() => {
@@ -154,7 +180,9 @@ export default function Index() {
       </main>
 
       {/* Bottom Filter Section */}
-      <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border">
+      <div className={`sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border transition-all duration-300 ease-in-out ${
+        showFilters ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'
+      }`}>
         <div className="container max-w-6xl mx-auto px-4 py-4">
           {/* Filters */}
           <div className="space-y-3 mb-4">
