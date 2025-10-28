@@ -103,7 +103,7 @@ export default function Index() {
           </div>
 
           {/* Search */}
-          <div className="relative mb-4">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <Input
               placeholder="Search by name..."
@@ -111,63 +111,6 @@ export default function Index() {
               onChange={(e) => setSearch(e.target.value)}
               className="pl-10"
             />
-          </div>
-
-          {/* Filters */}
-          <div className="space-y-3">
-            <FilterChips
-              label="Type"
-              options={typeOptions}
-              selected={filters.type}
-              onSelect={(value) => setFilters(prev => ({ ...prev, type: value }))}
-            />
-            <FilterChips
-              label="Sun Exposure"
-              options={sunOptions}
-              selected={filters.sunExposure}
-              onSelect={(value) => setFilters(prev => ({ ...prev, sunExposure: value }))}
-            />
-            <FilterChips
-              label="Wind Tolerance"
-              options={windOptions}
-              selected={filters.windTolerance}
-              onSelect={(value) => setFilters(prev => ({ ...prev, windTolerance: value }))}
-            />
-            <FilterChips
-              label="Season"
-              options={seasonOptions}
-              selected={filters.floweringSeason}
-              onSelect={(value) => setFilters(prev => ({ ...prev, floweringSeason: value }))}
-            />
-          </div>
-
-          {/* Sort */}
-          <div className="mt-4 flex justify-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <ArrowUpDown className="w-4 h-4" />
-                  {getSortLabel()}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'asc' })}>
-                  A → Z
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'desc' })}>
-                  Z → A
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'asc' })}>
-                  Price: Low → High
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'desc' })}>
-                  Price: High → Low
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({ field: 'id', direction: 'desc' })}>
-                  Recently Added
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
         </div>
       </header>
@@ -209,6 +152,68 @@ export default function Index() {
           </>
         )}
       </main>
+
+      {/* Bottom Filter Section */}
+      <div className="sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border">
+        <div className="container max-w-6xl mx-auto px-4 py-4">
+          {/* Filters */}
+          <div className="space-y-3 mb-4">
+            <FilterChips
+              label="Type"
+              options={typeOptions}
+              selected={filters.type}
+              onSelect={(value) => setFilters(prev => ({ ...prev, type: value }))}
+            />
+            <FilterChips
+              label="Sun Exposure"
+              options={sunOptions}
+              selected={filters.sunExposure}
+              onSelect={(value) => setFilters(prev => ({ ...prev, sunExposure: value }))}
+            />
+            <FilterChips
+              label="Wind Tolerance"
+              options={windOptions}
+              selected={filters.windTolerance}
+              onSelect={(value) => setFilters(prev => ({ ...prev, windTolerance: value }))}
+            />
+            <FilterChips
+              label="Season"
+              options={seasonOptions}
+              selected={filters.floweringSeason}
+              onSelect={(value) => setFilters(prev => ({ ...prev, floweringSeason: value }))}
+            />
+          </div>
+
+          {/* Sort */}
+          <div className="flex justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-2">
+                  <ArrowUpDown className="w-4 h-4" />
+                  {getSortLabel()}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'asc' })}>
+                  A → Z
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'desc' })}>
+                  Z → A
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'asc' })}>
+                  Price: Low → High
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'desc' })}>
+                  Price: High → Low
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSort({ field: 'id', direction: 'desc' })}>
+                  Recently Added
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
