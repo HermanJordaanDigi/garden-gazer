@@ -1,13 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { usePlantById, useUpdatePlantImage } from "@/hooks/usePlantsQuery";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { InfoTile } from "@/components/InfoTile";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Copy, ExternalLink, Sun, Wind, Sprout, Leaf, ImagePlus } from "lucide-react";
+import { ArrowLeft, Sun, Wind, Sprout, Leaf, ImagePlus } from "lucide-react";
 import { parseFlowerColors, formatPrice } from "@/lib/color";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -21,16 +20,6 @@ export default function PlantDetail() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
-
-  const handleCopyJSON = () => {
-    if (plant) {
-      navigator.clipboard.writeText(JSON.stringify(plant, null, 2));
-      toast({
-        title: "Copied to clipboard",
-        description: "Plant data copied as JSON",
-      });
-    }
-  };
 
   const handleUpdateImage = async () => {
     if (!plant || !imageUrl.trim()) {
@@ -99,7 +88,7 @@ export default function PlantDetail() {
   const flowerColors = parseFlowerColors(plant.flower_colour);
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background">
       {/* Header Image */}
       <div className="relative h-64 sm:h-80 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
         {plant.images ? (
@@ -284,54 +273,7 @@ export default function PlantDetail() {
               <p className="text-muted-foreground italic">No notes added yet.</p>
             </AccordionContent>
           </AccordionItem>
-
-          {/* Location */}
-          <AccordionItem value="location" className="border border-border rounded-lg px-4 bg-card">
-            <AccordionTrigger className="text-lg font-semibold hover:no-underline">
-              Location / Meta
-            </AccordionTrigger>
-            <AccordionContent className="space-y-3 pt-2">
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">Native Region</label>
-                <p className="text-foreground">{plant.native_region || "—"}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">Bed</label>
-                <p className="text-muted-foreground italic">—</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">Section</label>
-                <p className="text-muted-foreground italic">—</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-muted-foreground">Status</label>
-                <p className="text-muted-foreground italic">—</p>
-              </div>
-            </AccordionContent>
-          </AccordionItem>
         </Accordion>
-      </div>
-
-      {/* Sticky Bottom Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur-sm border-t border-border p-4">
-        <div className="container max-w-4xl mx-auto flex gap-3">
-          <Button
-            variant="outline"
-            className="flex-1"
-            disabled
-          >
-            <ExternalLink className="w-4 h-4 mr-2" />
-            Open in Sheet
-          </Button>
-          <Button
-            variant="default"
-            className="flex-1"
-            onClick={handleCopyJSON}
-          >
-            <Copy className="w-4 h-4 mr-2" />
-            Copy JSON
-          </Button>
-        </div>
       </div>
     </div>
   );

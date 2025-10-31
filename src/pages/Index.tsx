@@ -6,16 +6,14 @@ import { FilterChips } from "@/components/FilterChips";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Search, ArrowUpDown, Leaf, RefreshCw } from "lucide-react";
+import { Search, Filter, ChevronUp, ChevronDown, Leaf } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
 const sunOptions = ["Full Sun", "Partial Shade", "Shade"];
 const windOptions = ["High", "Moderate", "Low"];
-const seasonOptions = ["Spring", "Summer", "Autumn", "Winter"];
 export default function Index() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
-  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,
     sunExposure: undefined as string | undefined,
@@ -33,29 +31,6 @@ export default function Index() {
     ref: loadMoreRef,
     inView
   } = useInView();
-
-  // Scroll detection for filters
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    const handleScroll = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const scrollPosition = window.scrollY + window.innerHeight;
-        const pageHeight = document.documentElement.scrollHeight;
-        const distanceFromBottom = pageHeight - scrollPosition;
-
-        // Show filters when within 800px from bottom
-        setShowFilters(distanceFromBottom < 800);
-      }, 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Check initial position
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   // Debounce search
   useEffect(() => {
@@ -88,40 +63,98 @@ export default function Index() {
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
   const allPlants = data?.pages.flatMap(page => page.plants) || [];
   const totalCount = data?.pages[0]?.totalCount || 0;
-  const handleRefresh = () => {
-    refetch();
-  };
+
   const getSortLabel = () => {
     if (sort.field === 'common_name') {
-      return sort.direction === 'asc' ? 'A → Z' : 'Z → A';
+      return sort.direction === 'asc' ? 'Common Name (A-Z)' : 'Common Name (Z-A)';
     }
     if (sort.field === 'price') {
       return sort.direction === 'asc' ? 'Price: Low → High' : 'Price: High → Low';
     }
     return 'Recently Added';
   };
-  return <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
-        <div className="container max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3 mb-4">
-            <Leaf className="w-8 h-8 text-primary" />
-            <div>
-              <h1 className="font-bold text-foreground text-2xl">Villa Jordaan Plants</h1>
-              <p className="text-sm text-muted-foreground">{totalCount} plants in catalog</p>
-            </div>
-            <Button size="icon" variant="ghost" className="ml-auto" onClick={handleRefresh} disabled={isFetching}>
-              <RefreshCw className={`w-5 h-5 ${isFetching ? 'animate-spin' : ''}`} />
-            </Button>
-          </div>
 
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input placeholder="Search by name..." value={search} onChange={e => setSearch(e.target.value)} className="pl-10" />
+  return <div className="min-h-screen bg-background">
+      {/* Header - Green background like screenshot */}
+      <header className="sticky top-0 z-10 shadow-md" style={{ backgroundColor: '#738678' }}>
+        <div className="container max-w-6xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-3">
+            <h1 className="font-bold text-white text-xl">Plants</h1>
+
+            {/* Search */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <Input
+                placeholder="Search for a plant..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                className="pl-10 bg-white/90 border-0"
+              />
+            </div>
+
+            <Button size="icon" variant="ghost" className="text-white hover:bg-white/20">
+              <Filter className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </header>
+
+      {/* Sort and Filters Section */}
+      <div className="sticky top-[60px] z-10 bg-background border-b border-border">
+        <div className="container max-w-6xl mx-auto px-4 py-3">
+          {/* Sort Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="w-full justify-between mb-3 h-12 text-base">
+                <span>Sort by: {getSortLabel()}</span>
+                <div className="flex flex-col">
+                  <ChevronUp className="w-4 h-4 -mb-2" />
+                  <ChevronDown className="w-4 h-4" />
+                </div>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-[calc(100vw-2rem)] max-w-[calc(1536px-2rem)]">
+              <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'asc' })}>
+                Common Name (A-Z)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'desc' })}>
+                Common Name (Z-A)
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'asc' })}>
+                Price: Low → High
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'desc' })}>
+                Price: High → Low
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setSort({ field: 'id', direction: 'desc' })}>
+                Recently Added
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Filter Chips */}
+          <div className="space-y-2">
+            <FilterChips
+              label="Type"
+              options={typeOptions}
+              selected={filters.type}
+              onSelect={value => setFilters(prev => ({ ...prev, type: value }))}
+            />
+            <FilterChips
+              label="Sun Exposure"
+              options={sunOptions}
+              selected={filters.sunExposure}
+              onSelect={value => setFilters(prev => ({ ...prev, sunExposure: value }))}
+            />
+            <FilterChips
+              label="Wind Tolerance"
+              options={windOptions}
+              selected={filters.windTolerance}
+              onSelect={value => setFilters(prev => ({ ...prev, windTolerance: value }))}
+            />
+          </div>
+        </div>
+      </div>
 
       {/* Content */}
       <main className="container max-w-6xl mx-auto px-4 py-6">
@@ -148,74 +181,5 @@ export default function Index() {
               </div>}
           </>}
       </main>
-
-      {/* Bottom Filter Section */}
-      <div className={`sticky bottom-0 bg-background/95 backdrop-blur-sm border-t border-border transition-all duration-300 ease-in-out ${showFilters ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0 pointer-events-none'}`}>
-        <div className="container max-w-6xl mx-auto px-4 py-4">
-          {/* Filters */}
-          <div className="space-y-3 mb-4">
-            <FilterChips label="Type" options={typeOptions} selected={filters.type} onSelect={value => setFilters(prev => ({
-            ...prev,
-            type: value
-          }))} />
-            <FilterChips label="Sun Exposure" options={sunOptions} selected={filters.sunExposure} onSelect={value => setFilters(prev => ({
-            ...prev,
-            sunExposure: value
-          }))} />
-            <FilterChips label="Wind Tolerance" options={windOptions} selected={filters.windTolerance} onSelect={value => setFilters(prev => ({
-            ...prev,
-            windTolerance: value
-          }))} />
-            <FilterChips label="Season" options={seasonOptions} selected={filters.floweringSeason} onSelect={value => setFilters(prev => ({
-            ...prev,
-            floweringSeason: value
-          }))} />
-          </div>
-
-          {/* Sort */}
-          <div className="flex justify-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-2">
-                  <ArrowUpDown className="w-4 h-4" />
-                  {getSortLabel()}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => setSort({
-                field: 'common_name',
-                direction: 'asc'
-              })}>
-                  A → Z
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({
-                field: 'common_name',
-                direction: 'desc'
-              })}>
-                  Z → A
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({
-                field: 'price',
-                direction: 'asc'
-              })}>
-                  Price: Low → High
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({
-                field: 'price',
-                direction: 'desc'
-              })}>
-                  Price: High → Low
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSort({
-                field: 'id',
-                direction: 'desc'
-              })}>
-                  Recently Added
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </div>
-      </div>
     </div>;
 }
