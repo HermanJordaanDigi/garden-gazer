@@ -1,18 +1,26 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { usePlantById } from "@/hooks/usePlantsQuery";
+import { usePlantById, useUpdatePlantImage } from "@/hooks/usePlantsQuery";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { InfoTile } from "@/components/InfoTile";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { ArrowLeft, Copy, ExternalLink, Sun, Wind, Sprout, Leaf } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowLeft, Copy, ExternalLink, Sun, Wind, Sprout, Leaf, ImagePlus } from "lucide-react";
 import { parseFlowerColors, formatPrice } from "@/lib/color";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 export default function PlantDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
   const { data: plant, isLoading } = usePlantById(id || "");
+  const updateImageMutation = useUpdatePlantImage();
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleCopyJSON = () => {
     if (plant) {
@@ -21,6 +29,39 @@ export default function PlantDetail() {
         title: "Copied to clipboard",
         description: "Plant data copied as JSON",
       });
+    }
+  };
+
+  const handleUpdateImage = async () => {
+    if (!plant || !imageUrl.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid image URL",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      await updateImageMutation.mutateAsync({
+        plantId: plant.id,
+        imageUrl: imageUrl.trim(),
+      });
+
+      toast({
+        title: "Success",
+        description: "Plant image updated successfully",
+      });
+
+      setIsDialogOpen(false);
+      setImageUrl("");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update plant image",
+        variant: "destructive",
+      });
+      console.error("Error updating image:", error);
     }
   };
 
@@ -62,9 +103,9 @@ export default function PlantDetail() {
       {/* Header Image */}
       <div className="relative h-64 sm:h-80 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
         {plant.images ? (
-          <img 
-            src={plant.images} 
-            alt={plant.common_name || "Plant"} 
+          <img
+            src={plant.images}
+            alt={plant.common_name || "Plant"}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -72,7 +113,7 @@ export default function PlantDetail() {
             {getInitials()}
           </div>
         )}
-        
+
         {/* Back Button */}
         <Button
           size="icon"
@@ -82,6 +123,76 @@ export default function PlantDetail() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Button>
+
+        {/* Edit Image Button */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button
+              size="icon"
+              variant="secondary"
+              className="absolute top-4 right-4 shadow-lg"
+              onClick={() => setImageUrl(plant.images || "")}
+            >
+              <ImagePlus className="w-5 h-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[525px]">
+            <DialogHeader>
+              <DialogTitle>Update Plant Image</DialogTitle>
+              <DialogDescription>
+                Enter a new image URL for {plant.common_name || "this plant"}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="image-url">Image URL</Label>
+                <Input
+                  id="image-url"
+                  placeholder="https://example.com/image.jpg"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleUpdateImage();
+                    }
+                  }}
+                />
+              </div>
+              {imageUrl && (
+                <div className="grid gap-2">
+                  <Label>Preview</Label>
+                  <div className="relative h-48 bg-muted rounded-md overflow-hidden">
+                    <img
+                      src={imageUrl}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setIsDialogOpen(false);
+                  setImageUrl("");
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleUpdateImage}
+                disabled={updateImageMutation.isPending}
+              >
+                {updateImageMutation.isPending ? "Updating..." : "Update Image"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
 
       {/* Content */}

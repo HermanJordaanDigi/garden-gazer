@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Plant, SAMPLE_PLANTS } from "@/types/plant";
 
@@ -118,7 +118,7 @@ export function usePlantById(id: string) {
           .maybeSingle();
 
         if (error) throw error;
-        
+
         if (!data) {
           // Fallback to sample data
           return SAMPLE_PLANTS.find(p => p.id === plantId) || null;
@@ -130,6 +130,30 @@ export function usePlantById(id: string) {
         const plantId = parseInt(id, 10);
         return SAMPLE_PLANTS.find(p => p.id === plantId) || null;
       }
+    },
+  });
+}
+
+export function useUpdatePlantImage() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ plantId, imageUrl }: { plantId: number; imageUrl: string }) => {
+      const { data, error } = await supabase
+        .from('nurserydb')
+        .update({ images: imageUrl })
+        .eq('id', plantId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data as Plant;
+    },
+    onSuccess: (data) => {
+      // Invalidate and refetch the plant query
+      queryClient.invalidateQueries({ queryKey: ['plant', data.id.toString()] });
+      // Also invalidate the plants list
+      queryClient.invalidateQueries({ queryKey: ['plants'] });
     },
   });
 }
