@@ -187,7 +187,7 @@ export default function PlantDetail() {
       {/* Content */}
       <div className="container max-w-4xl mx-auto px-4 -mt-8">
         {/* Title Section */}
-        <div className="bg-background rounded-t-3xl p-6 mb-4 shadow-lg">
+        <div className="sticky top-0 z-20 bg-background rounded-t-3xl p-6 mb-4 shadow-lg border-b border-border">
           <h1 className="text-4xl font-bold text-foreground mb-2">
             {plant.common_name || "Unknown Plant"}
           </h1>
