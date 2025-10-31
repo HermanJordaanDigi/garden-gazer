@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { usePlantsQuery } from "@/hooks/usePlantsQuery";
 import { PlantCard } from "@/components/PlantCard";
 import { PlantSkeleton } from "@/components/PlantSkeleton";
-import { FilterChips } from "@/components/FilterChips";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -132,26 +131,76 @@ export default function Index() {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Filter Chips */}
-          <div className="space-y-1.5">
-            <FilterChips
-              label="Type"
-              options={typeOptions}
-              selected={filters.type}
-              onSelect={value => setFilters(prev => ({ ...prev, type: value }))}
-            />
-            <FilterChips
-              label="Sun Exposure"
-              options={sunOptions}
-              selected={filters.sunExposure}
-              onSelect={value => setFilters(prev => ({ ...prev, sunExposure: value }))}
-            />
-            <FilterChips
-              label="Wind Tolerance"
-              options={windOptions}
-              selected={filters.windTolerance}
-              onSelect={value => setFilters(prev => ({ ...prev, windTolerance: value }))}
-            />
+          {/* Filter Dropdowns */}
+          <div className="flex gap-2">
+            {/* Type Filter */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="h-8 text-xs px-3 bg-background">
+                  {filters.type || "Type"}
+                  <ChevronDown className="w-3 h-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="z-50">
+                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, type: undefined }))}>
+                  All Types
+                </DropdownMenuItem>
+                {typeOptions.map(option => (
+                  <DropdownMenuItem 
+                    key={option}
+                    onClick={() => setFilters(prev => ({ ...prev, type: option }))}
+                  >
+                    {option}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Sun Exposure Filter */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="h-8 text-xs px-3 bg-background">
+                  {filters.sunExposure || "Sun Exposure"}
+                  <ChevronDown className="w-3 h-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="z-50">
+                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, sunExposure: undefined }))}>
+                  All Exposures
+                </DropdownMenuItem>
+                {sunOptions.map(option => (
+                  <DropdownMenuItem 
+                    key={option}
+                    onClick={() => setFilters(prev => ({ ...prev, sunExposure: option }))}
+                  >
+                    {option}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Wind Tolerance Filter */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="h-8 text-xs px-3 bg-background">
+                  {filters.windTolerance || "Wind Tolerance"}
+                  <ChevronDown className="w-3 h-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="z-50">
+                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, windTolerance: undefined }))}>
+                  All Tolerances
+                </DropdownMenuItem>
+                {windOptions.map(option => (
+                  <DropdownMenuItem 
+                    key={option}
+                    onClick={() => setFilters(prev => ({ ...prev, windTolerance: option }))}
+                  >
+                    {option}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>
