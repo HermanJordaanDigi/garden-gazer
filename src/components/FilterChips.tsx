@@ -11,16 +11,16 @@ interface FilterChipsProps {
 
 export function FilterChips({ label, options, selected, onSelect }: FilterChipsProps) {
   return (
-    <div className="space-y-2">
-      <label className="text-sm font-medium text-muted-foreground">{label}</label>
+    <div className="space-y-1">
+      <label className="text-xs font-medium text-muted-foreground">{label}</label>
       <ScrollArea className="w-full whitespace-nowrap">
-        <div className="flex gap-2 pb-2">
+        <div className="flex gap-1.5 pb-1.5">
           {options.map((option) => (
             <Badge
               key={option}
               variant={selected === option ? "default" : "outline"}
               className={cn(
-                "cursor-pointer transition-all hover:scale-105 active:scale-95",
+                "cursor-pointer transition-all hover:scale-105 active:scale-95 text-xs py-0.5 px-2",
                 selected === option && "shadow-md"
               )}
               onClick={() => onSelect(selected === option ? undefined : option)}

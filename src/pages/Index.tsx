@@ -101,11 +101,11 @@ export default function Index() {
 
       {/* Sort and Filters Section */}
       <div className="sticky top-[60px] z-10 bg-background border-b border-border">
-        <div className="container max-w-6xl mx-auto px-4 py-3">
+        <div className="container max-w-6xl mx-auto px-4 py-2">
           {/* Sort Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-full justify-between mb-3 h-12 text-base">
+              <Button variant="ghost" className="w-full justify-between mb-2 h-9 text-sm">
                 <span>Sort by: {getSortLabel()}</span>
                 <div className="flex flex-col">
                   <ChevronUp className="w-4 h-4 -mb-2" />
@@ -133,7 +133,7 @@ export default function Index() {
           </DropdownMenu>
 
           {/* Filter Chips */}
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             <FilterChips
               label="Type"
               options={typeOptions}
