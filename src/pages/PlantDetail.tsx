@@ -185,7 +185,7 @@ export default function PlantDetail() {
       </div>
 
       {/* Content */}
-      <div className="container max-w-4xl mx-auto px-4 -mt-8">
+      <div className="container max-w-4xl mx-auto px-4">
         {/* Title Section */}
         <div className="bg-background rounded-t-3xl p-6 mb-4 shadow-lg">
           <h1 className="text-4xl font-bold text-foreground mb-2">
