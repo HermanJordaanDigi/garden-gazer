@@ -42,7 +42,7 @@ export function PlantCard({
 
         {/* Pills */}
         <div className="flex flex-wrap gap-2">
-          {plant.native_region && <Badge variant="secondary" className="text-xs bg-[#738778]">
+          {plant.native_region && <Badge variant="secondary" className="text-xs bg-[#2596be] text-white">
               {plant.native_region}
             </Badge>}
           {plant.type && <Badge variant="outline" className="text-xs">
