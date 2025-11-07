@@ -145,6 +145,8 @@ export function useUpdatePlantImage() {
 
   return useMutation({
     mutationFn: async ({ plantId, imageUrl }: { plantId: number; imageUrl: string }) => {
+      console.log('Starting image update...', { plantId, imageUrl });
+      
       const { data, error } = await supabase
         .from('nurserydb')
         .update({ images: imageUrl })
@@ -152,14 +154,23 @@ export function useUpdatePlantImage() {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database update error:', error);
+        throw error;
+      }
+      
+      console.log('Update successful:', data);
       return data as Plant;
     },
     onSuccess: (data) => {
+      console.log('Mutation onSuccess called');
       // Invalidate and refetch the plant query
       queryClient.invalidateQueries({ queryKey: ['plant', data.id.toString()] });
       // Also invalidate the plants list
       queryClient.invalidateQueries({ queryKey: ['plants'] });
+    },
+    onError: (error) => {
+      console.error('Mutation onError called:', error);
     },
   });
 }
