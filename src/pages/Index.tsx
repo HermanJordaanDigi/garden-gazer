@@ -3,19 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { usePlantsQuery } from "@/hooks/usePlantsQuery";
 import { PlantCard } from "@/components/PlantCard";
 import { PlantSkeleton } from "@/components/PlantSkeleton";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Search, Filter, ChevronUp, ChevronDown, Leaf, Plus } from "lucide-react";
+import { Filter, ChevronUp, ChevronDown, Leaf, Plus } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
 const sunOptions = ["Full Sun", "Partial Shade", "Shade"];
 const windOptions = ["High", "Moderate", "Low"];
 export default function Index() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [viewMode, setViewMode] = useState<'searches' | 'collection'>('searches');
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,
@@ -35,13 +32,6 @@ export default function Index() {
     inView
   } = useInView();
 
-  // Debounce search
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearch(search);
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [search]);
   const {
     data,
     fetchNextPage,
@@ -52,7 +42,6 @@ export default function Index() {
     isFetching
   } = usePlantsQuery({
     filters: {
-      search: debouncedSearch,
       ...filters,
       bought: viewMode === 'collection'
     },
@@ -81,33 +70,12 @@ export default function Index() {
   return <div className="min-h-screen bg-background">
       {/* Header - Green background like screenshot */}
       <header className="sticky top-0 z-10 shadow-md" style={{ backgroundColor: '#738678' }}>
-        <div className="container max-w-6xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
+        <div className="container max-w-6xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between gap-4">
+            {/* Left: Title */}
             <h1 className="font-bold text-white text-xl">Plants</h1>
-
-            {/* Search */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                placeholder="Search for a plant..."
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                className="pl-10 bg-white/90 border-0"
-              />
-            </div>
-
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              onClick={() => navigate("/add-plant")}
-              className="text-white hover:bg-white/20"
-            >
-              <Plus className="w-5 h-5" />
-            </Button>
-          </div>
-
-          {/* View Mode Toggle */}
-          <div className="flex justify-center mt-3">
+            
+            {/* Center: Toggle */}
             <ToggleGroup 
               type="single" 
               value={viewMode} 
@@ -121,12 +89,22 @@ export default function Index() {
                 Collection
               </ToggleGroupItem>
             </ToggleGroup>
+            
+            {/* Right: Add button */}
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={() => navigate("/add-plant")}
+              className="text-white hover:bg-white/20"
+            >
+              <Plus className="w-5 h-5" />
+            </Button>
           </div>
         </div>
       </header>
 
       {/* Sort and Filters Section */}
-      <div className="sticky top-[60px] z-10 bg-background border-b border-border">
+      <div className="sticky top-[72px] z-10 bg-background border-b border-border">
         <div className="container max-w-6xl mx-auto px-4 py-2">
           {/* Sort Dropdown */}
           <DropdownMenu>
