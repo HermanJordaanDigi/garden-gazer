@@ -34,7 +34,7 @@ export default function AddPlant() {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch("https://jordaandigi.app.n8n.cloud/webhook/text_input", {
+      const response = await fetch("https://jordaandigi.app.n8n.cloud/webhook-test/text_input", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
