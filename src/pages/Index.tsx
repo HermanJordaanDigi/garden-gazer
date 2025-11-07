@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { usePlantsQuery } from "@/hooks/usePlantsQuery";
 import { PlantCard } from "@/components/PlantCard";
 import { PlantSkeleton } from "@/components/PlantSkeleton";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Search, Filter, ChevronUp, ChevronDown, Leaf } from "lucide-react";
+import { Search, Filter, ChevronUp, ChevronDown, Leaf, Plus } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
 const sunOptions = ["Full Sun", "Partial Shade", "Shade"];
 const windOptions = ["High", "Moderate", "Low"];
 export default function Index() {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filters, setFilters] = useState({
@@ -91,8 +93,13 @@ export default function Index() {
               />
             </div>
 
-            <Button size="icon" variant="ghost" className="text-white hover:bg-white/20">
-              <Filter className="w-5 h-5" />
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              onClick={() => navigate("/add-plant")}
+              className="text-white hover:bg-white/20"
+            >
+              <Plus className="w-5 h-5" />
             </Button>
           </div>
         </div>
