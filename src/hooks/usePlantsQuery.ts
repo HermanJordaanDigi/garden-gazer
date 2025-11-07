@@ -8,6 +8,7 @@ interface PlantFilters {
   sunExposure?: string;
   windTolerance?: string;
   floweringSeason?: string;
+  bought?: boolean;
 }
 
 interface PlantSort {
@@ -60,6 +61,11 @@ export function usePlantsQuery({
         // Apply flowering season filter
         if (filters.floweringSeason) {
           query = query.ilike('flowering_season', `%${filters.floweringSeason}%`);
+        }
+
+        // Apply bought filter
+        if (filters.bought !== undefined) {
+          query = query.eq('bought', filters.bought);
         }
 
         // Apply sorting

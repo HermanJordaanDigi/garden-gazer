@@ -6,6 +6,7 @@ import { PlantSkeleton } from "@/components/PlantSkeleton";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Search, Filter, ChevronUp, ChevronDown, Leaf, Plus } from "lucide-react";
 import { useInView } from "react-intersection-observer";
 const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
@@ -15,6 +16,7 @@ export default function Index() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [viewMode, setViewMode] = useState<'searches' | 'collection'>('searches');
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,
     sunExposure: undefined as string | undefined,
@@ -51,7 +53,8 @@ export default function Index() {
   } = usePlantsQuery({
     filters: {
       search: debouncedSearch,
-      ...filters
+      ...filters,
+      bought: viewMode === 'collection'
     },
     sort
   });
@@ -101,6 +104,23 @@ export default function Index() {
             >
               <Plus className="w-5 h-5" />
             </Button>
+          </div>
+
+          {/* View Mode Toggle */}
+          <div className="flex justify-center mt-3">
+            <ToggleGroup 
+              type="single" 
+              value={viewMode} 
+              onValueChange={(value) => value && setViewMode(value as 'searches' | 'collection')}
+              className="bg-white/90 rounded-lg p-1"
+            >
+              <ToggleGroupItem value="searches" className="px-6">
+                Searches
+              </ToggleGroupItem>
+              <ToggleGroupItem value="collection" className="px-6">
+                Collection
+              </ToggleGroupItem>
+            </ToggleGroup>
           </div>
         </div>
       </header>
