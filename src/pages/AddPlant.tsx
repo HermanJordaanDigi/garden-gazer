@@ -14,7 +14,15 @@ const formSchema = z.object({
     .trim()
     .min(3, { message: "Scientific name must be at least 3 characters" })
     .max(100, { message: "Scientific name must be less than 100 characters" })
-    .nonempty({ message: "Scientific name is required" })
+    .nonempty({ message: "Scientific name is required" }),
+  price: z.union([
+    z.string().transform(val => val === '' ? undefined : parseFloat(val)),
+    z.number()
+  ])
+    .optional()
+    .refine(val => val === undefined || val > 0, { 
+      message: "Price must be a positive number" 
+    })
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -26,7 +34,8 @@ export default function AddPlant() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      scientific_name: ""
+      scientific_name: "",
+      price: undefined
     }
   });
 
@@ -40,7 +49,8 @@ export default function AddPlant() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          scientific_name: data.scientific_name
+          scientific_name: data.scientific_name,
+          price: data.price
         })
       });
 
@@ -97,6 +107,26 @@ export default function AddPlant() {
                     <FormControl>
                       <Input
                         placeholder="e.g., Quercus robur"
+                        {...field}
+                        disabled={isSubmitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="price"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Price (optional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        placeholder="e.g., 15.99"
                         {...field}
                         disabled={isSubmitting}
                       />
