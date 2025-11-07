@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { usePlantById, useUpdatePlantImage } from "@/hooks/usePlantsQuery";
+import { useImageUpload } from "@/hooks/useImageUpload";
 import { Button } from "@/components/ui/button";
 import { InfoTile } from "@/components/InfoTile";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -17,32 +18,54 @@ export default function PlantDetail() {
   const { toast } = useToast();
   const { data: plant, isLoading } = usePlantById(id || "");
   const updateImageMutation = useUpdatePlantImage();
+  const uploadImageMutation = useImageUpload();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
 
   const handleUpdateImage = async () => {
-    if (!plant || !imageUrl.trim()) {
+    if (!plant) return;
+    
+    let finalImageUrl = imageUrl.trim();
+    
+    // If a file is selected, upload it first
+    if (selectedFile) {
+      try {
+        finalImageUrl = await uploadImageMutation.mutateAsync(selectedFile);
+      } catch (error) {
+        toast({
+          title: "Upload Failed",
+          description: "Failed to upload image. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+    
+    if (!finalImageUrl) {
       toast({
         title: "Error",
-        description: "Please enter a valid image URL",
+        description: "Please select an image or enter a URL",
         variant: "destructive",
       });
       return;
     }
-
+    
+    // Update plant record with the image URL
     try {
       await updateImageMutation.mutateAsync({
         plantId: plant.id,
-        imageUrl: imageUrl.trim(),
+        imageUrl: finalImageUrl,
       });
-
+      
       toast({
         title: "Success",
         description: "Plant image updated successfully",
       });
-
+      
       setIsDialogOpen(false);
+      setSelectedFile(null);
       setImageUrl("");
     } catch (error) {
       toast({
@@ -129,30 +152,40 @@ export default function PlantDetail() {
             <DialogHeader>
               <DialogTitle>Update Plant Image</DialogTitle>
               <DialogDescription>
-                Enter a new image URL for {plant.common_name || "this plant"}
+                Upload a new image for {plant.common_name || "this plant"}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
+              {/* File Upload Section */}
               <div className="grid gap-2">
-                <Label htmlFor="image-url">Image URL</Label>
+                <Label htmlFor="image-file">Upload Image</Label>
                 <Input
-                  id="image-url"
-                  placeholder="https://example.com/image.jpg"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleUpdateImage();
+                  id="image-file"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setSelectedFile(file);
+                      setImageUrl("");
                     }
                   }}
+                  className="cursor-pointer"
                 />
+                {selectedFile && (
+                  <p className="text-sm text-muted-foreground">
+                    Selected: {selectedFile.name}
+                  </p>
+                )}
               </div>
-              {imageUrl && (
+              
+              {/* Preview Section */}
+              {(selectedFile || imageUrl) && (
                 <div className="grid gap-2">
                   <Label>Preview</Label>
                   <div className="relative h-48 bg-muted rounded-md overflow-hidden">
                     <img
-                      src={imageUrl}
+                      src={selectedFile ? URL.createObjectURL(selectedFile) : imageUrl}
                       alt="Preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -162,12 +195,30 @@ export default function PlantDetail() {
                   </div>
                 </div>
               )}
+              
+              {/* Optional: URL Input Fallback */}
+              <div className="grid gap-2">
+                <Label htmlFor="image-url">Or enter image URL</Label>
+                <Input
+                  id="image-url"
+                  placeholder="https://example.com/image.jpg"
+                  value={imageUrl}
+                  onChange={(e) => {
+                    setImageUrl(e.target.value);
+                    if (e.target.value) {
+                      setSelectedFile(null);
+                    }
+                  }}
+                  disabled={!!selectedFile}
+                />
+              </div>
             </div>
             <DialogFooter>
               <Button
                 variant="outline"
                 onClick={() => {
                   setIsDialogOpen(false);
+                  setSelectedFile(null);
                   setImageUrl("");
                 }}
               >
@@ -175,9 +226,11 @@ export default function PlantDetail() {
               </Button>
               <Button
                 onClick={handleUpdateImage}
-                disabled={updateImageMutation.isPending}
+                disabled={uploadImageMutation.isPending || updateImageMutation.isPending}
               >
-                {updateImageMutation.isPending ? "Updating..." : "Update Image"}
+                {uploadImageMutation.isPending ? "Uploading..." : 
+                 updateImageMutation.isPending ? "Updating..." : 
+                 "Update Image"}
               </Button>
             </DialogFooter>
           </DialogContent>
