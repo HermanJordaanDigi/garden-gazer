@@ -23,7 +23,7 @@ export function PlantCard({
   return <Card className="overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg border-border/50 active:scale-[0.98]" onClick={handleClick}>
       {/* Hero Image */}
       <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-        {plant.images ? <img src={plant.images} alt={plant.common_name || "Plant"} className="w-full h-full object-cover" /> : <div className="text-4xl font-bold text-primary/40">
+        {plant.images?.[0] ? <img src={plant.images[0]} alt={plant.common_name || "Plant"} className="w-full h-full object-cover" /> : <div className="text-4xl font-bold text-primary/40">
             {getInitials()}
           </div>}
       </div>

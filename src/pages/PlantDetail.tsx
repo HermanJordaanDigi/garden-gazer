@@ -114,9 +114,9 @@ export default function PlantDetail() {
     <div className="min-h-screen bg-background">
       {/* Header Image */}
       <div className="relative h-64 sm:h-80 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-        {plant.images ? (
+        {plant.images?.[0] ? (
           <img
-            src={plant.images}
+            src={plant.images[0]}
             alt={plant.common_name || "Plant"}
             className="w-full h-full object-cover"
           />
@@ -143,7 +143,7 @@ export default function PlantDetail() {
               size="icon"
               variant="secondary"
               className="absolute top-4 right-4 shadow-lg"
-              onClick={() => setImageUrl(plant.images || "")}
+              onClick={() => setImageUrl(plant.images?.[0] || "")}
             >
               <ImagePlus className="w-5 h-5" />
             </Button>

@@ -81,7 +81,7 @@ export function usePlantsQuery({
         if (error) throw error;
 
         return {
-          plants: (data as Plant[]) || [],
+          plants: (data as unknown as Plant[]) || [],
           nextPage: (data?.length || 0) === pageSize ? pageParam + 1 : undefined,
           totalCount: count || 0
         };
@@ -130,7 +130,7 @@ export function usePlantById(id: string) {
           return SAMPLE_PLANTS.find(p => p.id === plantId) || null;
         }
 
-        return data as Plant;
+        return data as unknown as Plant;
       } catch (error) {
         console.error('Error fetching plant:', error);
         const plantId = parseInt(id, 10);
@@ -149,7 +149,7 @@ export function useUpdatePlantImage() {
       
       const { data, error } = await supabase
         .from('nurserydb')
-        .update({ images: imageUrl })
+        .update({ images: [imageUrl] } as any)
         .eq('id', plantId)
         .select()
         .single();
@@ -160,7 +160,7 @@ export function useUpdatePlantImage() {
       }
       
       console.log('Update successful:', data);
-      return data as Plant;
+      return data as unknown as Plant;
     },
     onSuccess: (data) => {
       console.log('Mutation onSuccess called');

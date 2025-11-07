@@ -11,7 +11,7 @@ export interface Plant {
   mature_height_width: string | null;
   flowering_season: string | null;
   flower_colour: string | null;
-  images: string | null;
+  images: string[] | null;
   price: number | null;
   bought?: boolean | null;
 }
