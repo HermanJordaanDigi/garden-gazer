@@ -34,14 +34,14 @@ All colors MUST be HSL.
 
     --border: 71 20% 90%;
     --input: 71 20% 90%;
-    --ring: 122 39% 49%;
+    --ring: 132 47% 31%;
 
     --radius: 0.75rem;
     
-    --gradient-plant: linear-gradient(135deg, hsl(122 39% 49%), hsl(142 50% 45%));
+    --gradient-plant: linear-gradient(135deg, hsl(132 47% 31%), hsl(142 50% 35%));
     --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(42 45% 98%));
     --shadow-soft: 0 2px 8px hsl(200 28% 28% / 0.08);
-    --shadow-hover: 0 4px 16px hsl(122 39% 49% / 0.15);
+    --shadow-hover: 0 4px 16px hsl(132 47% 31% / 0.15);
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --sidebar-background: 0 0% 98%;
@@ -88,12 +88,12 @@ All colors MUST be HSL.
 
     --border: 0 0% 20%;
     --input: 0 0% 20%;
-    --ring: 122 39% 49%;
+    --ring: 132 47% 31%;
     
-    --gradient-plant: linear-gradient(135deg, hsl(122 39% 49%), hsl(142 50% 35%));
+    --gradient-plant: linear-gradient(135deg, hsl(132 47% 31%), hsl(142 50% 35%));
     --gradient-card: linear-gradient(180deg, hsl(0 0% 12%), hsl(0 0% 10%));
     --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.3);
-    --shadow-hover: 0 4px 16px hsl(122 39% 49% / 0.25);
+    --shadow-hover: 0 4px 16px hsl(132 47% 31% / 0.25);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
