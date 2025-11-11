@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { usePlantById, useUpdatePlantImage } from "@/hooks/usePlantsQuery";
+import { usePlantById, useUpdatePlantImage, useMarkAsBought } from "@/hooks/usePlantsQuery";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { Button } from "@/components/ui/button";
 import { InfoTile } from "@/components/InfoTile";
@@ -7,7 +7,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, Sun, Wind, Sprout, Leaf, ImagePlus } from "lucide-react";
+import { ArrowLeft, Sun, Wind, Sprout, Leaf, ImagePlus, ShoppingBag } from "lucide-react";
 import { parseFlowerColors, formatPrice } from "@/lib/color";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -19,6 +19,7 @@ export default function PlantDetail() {
   const { data: plant, isLoading } = usePlantById(id || "");
   const updateImageMutation = useUpdatePlantImage();
   const uploadImageMutation = useImageUpload();
+  const markAsBoughtMutation = useMarkAsBought();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -74,6 +75,30 @@ export default function PlantDetail() {
         variant: "destructive",
       });
       console.error("Error updating image:", error);
+    }
+  };
+
+  const handleMarkAsBought = async () => {
+    if (!plant) return;
+    
+    try {
+      await markAsBoughtMutation.mutateAsync(plant.id);
+      
+      toast({
+        title: "Success!",
+        description: "Plant added to your collection!",
+      });
+      
+      // Navigate back to home after a brief delay
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to mark as bought. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -247,11 +272,23 @@ export default function PlantDetail() {
           <p className="text-xl italic text-muted-foreground mb-4">
             {plant.scientific_name || "—"}
           </p>
-          {plant.native_region && (
-            <span className="inline-block px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-medium">
-              {plant.native_region}
-            </span>
-          )}
+          <div className="flex items-center gap-3 flex-wrap">
+            {plant.native_region && (
+              <span className="inline-block px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-medium">
+                {plant.native_region}
+              </span>
+            )}
+            {!plant.bought && (
+              <Button 
+                onClick={handleMarkAsBought}
+                disabled={markAsBoughtMutation.isPending}
+                className="gap-2"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                {markAsBoughtMutation.isPending ? "Marking as Bought..." : "Mark as Bought"}
+              </Button>
+            )}
+          </div>
         </div>
 
         {/* Info Grid */}

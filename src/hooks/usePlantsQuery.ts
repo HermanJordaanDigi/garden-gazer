@@ -174,3 +174,31 @@ export function useUpdatePlantImage() {
     },
   });
 }
+
+export function useMarkAsBought() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (plantId: number) => {
+      const { data, error } = await supabase
+        .from('nurserydb')
+        .update({ bought: true })
+        .eq('id', plantId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Mark as bought error:', error);
+        throw error;
+      }
+      
+      return data as unknown as Plant;
+    },
+    onSuccess: (data) => {
+      // Invalidate the specific plant query
+      queryClient.invalidateQueries({ queryKey: ['plant', data.id.toString()] });
+      // Invalidate the plants list to refresh both Searches and Collection views
+      queryClient.invalidateQueries({ queryKey: ['plants'] });
+    },
+  });
+}
