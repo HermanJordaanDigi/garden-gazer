@@ -274,7 +274,7 @@ export default function PlantDetail() {
           </p>
           <div className="flex items-center gap-3 flex-wrap">
             {plant.native_region && (
-              <span className="inline-block px-4 py-2 rounded-full bg-[#2596be] text-white text-sm font-medium">
+              <span className="inline-block px-4 py-2 rounded-full bg-primary text-primary-foreground text-sm font-medium">
                 {plant.native_region}
               </span>
             )}
