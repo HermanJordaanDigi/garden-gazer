@@ -95,20 +95,22 @@ export default function Index() {
 
   return (
     <MainLayout>
-      {/* Greeting Section */}
-      <section className="max-w-7xl mx-auto w-full pt-2">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight text-woodland-text-main">
-              {getGreeting()}, {userName}
-            </h1>
-            <p className="text-woodland-text-muted mt-2 text-lg font-light">
-              Here's what's happening in your jungle today.
-            </p>
+      {/* Greeting Section - Only show when logged in */}
+      {user && (
+        <section className="max-w-7xl mx-auto w-full pt-2">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight text-woodland-text-main">
+                {getGreeting()}, {userName}
+              </h1>
+              <p className="text-woodland-text-muted mt-2 text-lg font-light">
+                Here's what's happening in your jungle today.
+              </p>
+            </div>
+            <WeatherWidget />
           </div>
-          <WeatherWidget />
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Filter Section */}
       <section className="max-w-7xl mx-auto w-full mb-6">
