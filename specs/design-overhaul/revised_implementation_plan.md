@@ -9,27 +9,27 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 1.1 Install Fonts & Icons
 **File**: `index.html`
 
-- [ ] Add Inter font (replace Epilogue):
+- [x] Add Inter font (replace Epilogue):
   ```html
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   ```
-- [ ] Add Material Symbols Outlined:
+- [x] Add Material Symbols Outlined:
   ```html
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
   ```
-- [ ] Remove existing Epilogue font link
+- [x] Remove existing Epilogue font link
 
 ### 1.2 Update Tailwind Configuration
 **File**: `tailwind.config.ts`
 
-- [ ] Update `fontFamily`:
+- [x] Update `fontFamily`:
   ```ts
   fontFamily: {
     display: ['Inter', 'sans-serif'],
     sans: ['Inter', 'sans-serif'],
   }
   ```
-- [ ] Add custom colors for the Muted Woodland palette:
+- [x] Add custom colors for the Muted Woodland palette:
   ```ts
   colors: {
     // ... existing shadcn colors ...
@@ -50,21 +50,21 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 1.3 Update CSS Variables
 **File**: `src/index.css`
 
-- [ ] Update `:root` CSS variables to match Muted Woodland palette:
+- [x] Update `:root` CSS variables to match Muted Woodland palette:
   - `--background`: Convert `#E8ECE6` to HSL
   - `--foreground`: Convert `#3E4A3B` to HSL
   - `--primary`: Convert `#7A9E5C` to HSL
   - `--card`: Convert `#F2F4F0` to HSL
   - `--muted`: Adjust for text-muted color
   - `--border`: Convert `#DCE0D9` to HSL
-- [ ] Update `.dark` variables for dark mode support
-- [ ] Change body font from Epilogue to Inter:
+- [x] Update `.dark` variables for dark mode support
+- [x] Change body font from Epilogue to Inter:
   ```css
   body {
     @apply bg-background text-foreground font-sans;
   }
   ```
-- [ ] Add Material Symbols styling:
+- [x] Add Material Symbols styling:
   ```css
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -74,7 +74,7 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 1.4 Create Icon Component
 **File**: `src/components/ui/MaterialIcon.tsx` (new)
 
-- [ ] Create a wrapper component for Material Symbols:
+- [x] Create a wrapper component for Material Symbols:
   ```tsx
   interface MaterialIconProps {
     name: string;

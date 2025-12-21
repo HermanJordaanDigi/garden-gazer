@@ -14,9 +14,21 @@ export default {
     },
     extend: {
       fontFamily: {
-        epilogue: ['Epilogue', 'sans-serif'],
+        display: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
       },
       colors: {
+        woodland: {
+          'primary': '#7A9E5C',
+          'background-light': '#E8ECE6',
+          'background-dark': '#2A332A',
+          'surface-light': '#F2F4F0',
+          'surface-dark': '#3A453A',
+          'border-light': '#DCE0D9',
+          'border-dark': '#4F5E4F',
+          'text-main': '#3E4A3B',
+          'text-muted': '#7C8C74',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
