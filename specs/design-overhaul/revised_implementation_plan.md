@@ -249,9 +249,9 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 4.1 Update PlantDetail Layout
 **File**: `src/pages/PlantDetail.tsx`
 
-- [ ] Wrap in MainLayout or keep full-width (design shows no sidebar)
+- [x] Wrap in MainLayout or keep full-width (design shows no sidebar)
   - **Decision**: PlantDetail uses full-width layout with just Header breadcrumb
-- [ ] Implement two-column grid:
+- [x] Implement two-column grid:
   ```tsx
   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
     <div className="lg:col-span-4">{/* Hero Image */}</div>
@@ -262,41 +262,41 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 4.2 Create PlantHeroImage Component
 **File**: `src/components/plant-detail/PlantHeroImage.tsx` (new)
 
-- [ ] White card container with padding (`p-3`)
-- [ ] Image with `aspect-[4/5]`, `rounded-xl`
-- [ ] Gallery badge overlay (top-right)
-- [ ] Image upload button integration (existing Dialog)
+- [x] White card container with padding (`p-3`)
+- [x] Image with `aspect-[4/5]`, `rounded-xl`
+- [x] Gallery badge overlay (top-right)
+- [x] Image upload button integration (existing Dialog)
 
 ### 4.3 Create PlantHeader Component
 **File**: `src/components/plant-detail/PlantHeader.tsx` (new)
 
-- [ ] Badge row (flex, gap-2):
+- [x] Badge row (flex, gap-2):
   - Type badge: primary color, icon `public`
   - Native region badge: gray, icon `location_on`
   - Growth habit badge: gray, icon `category`
-- [ ] Common name: `text-4xl md:text-5xl font-black`
-- [ ] Scientific name: `text-xl italic text-[#4c9a4c]`
-- [ ] Connect to plant data via props
+- [x] Common name: `text-4xl md:text-5xl font-black`
+- [x] Scientific name: `text-xl italic text-[#4c9a4c]`
+- [x] Connect to plant data via props
 
 ### 4.4 Create FeatureCard Component
 **File**: `src/components/plant-detail/FeatureCard.tsx` (new)
 
-- [ ] Props: `icon`, `iconColor`, `label`, `value`, `rating?`
-- [ ] White card with border
-- [ ] Icon in colored circular background
-- [ ] Label (uppercase, small, muted)
-- [ ] Value (bold)
-- [ ] Optional: Progress bar for ratings
+- [x] Props: `icon`, `iconColor`, `label`, `value`, `rating?`
+- [x] White card with border
+- [x] Icon in colored circular background
+- [x] Label (uppercase, small, muted)
+- [x] Value (bold)
+- [x] Optional: Progress bar for ratings
 
 ### 4.5 Create CharacteristicsGrid Component
 **File**: `src/components/plant-detail/CharacteristicsGrid.tsx` (new)
 
-- [ ] Grid: `grid-cols-2 md:grid-cols-3 gap-4`
-- [ ] Render only 3 FeatureCards:
+- [x] Grid: `grid-cols-2 md:grid-cols-3 gap-4`
+- [x] Render only 3 FeatureCards:
   1. Sun Exposure (`sun_exposure`)
   2. Soil Type (`soil_type`)
   3. Wind Tolerance (`wind_tolerance`)
-- [ ] Map icon colors:
+- [x] Map icon colors:
   - Sun: orange (`bg-orange-50`, `text-orange-500`)
   - Soil: amber (`bg-amber-50`, `text-amber-700`)
   - Wind: gray (`bg-gray-50`, `text-gray-500`)
@@ -304,21 +304,21 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 4.6 Create DimensionsCard Component
 **File**: `src/components/plant-detail/DimensionsCard.tsx` (new)
 
-- [ ] Parse `mature_height_width` field
-- [ ] Create regex parser for formats like:
+- [x] Parse `mature_height_width` field
+- [x] Create regex parser for formats like:
   - "30-60 cm tall, 60 cm wide"
   - "Up to 90 cm tall, 180 cm wide"
   - "2 - 3m tall, 1 - 1.5m wide"
-- [ ] Visual representation:
+- [x] Visual representation:
   - Human silhouette reference (icon `accessibility_new` at ~1.7m)
   - Plant height indicator
-- [ ] Display height and width in grid below visual
+- [x] Display height and width in grid below visual
 
 ### 4.7 Create BiologicalTraitsCard Component
 **File**: `src/components/plant-detail/BiologicalTraitsCard.tsx` (new)
 
-- [ ] Card with "Biological Traits" title
-- [ ] List of traits:
+- [x] Card with "Biological Traits" title
+- [x] List of traits:
   1. Flowering Season:
      - Icon: `local_florist` (purple)
      - Value: `flowering_season`
@@ -333,9 +333,9 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 4.8 Assemble PlantDetail Page
 **File**: `src/pages/PlantDetail.tsx`
 
-- [ ] Add Breadcrumb: "Library" > [plant.common_name]
-- [ ] Add Edit button (top-right of header area)
-- [ ] Replace existing layout with:
+- [x] Add Breadcrumb: "Library" > [plant.common_name]
+- [x] Add Edit button (top-right of header area)
+- [x] Replace existing layout with:
   ```tsx
   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
     <div className="lg:col-span-4">
@@ -351,8 +351,8 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
     </div>
   </div>
   ```
-- [ ] Keep "Mark as Bought" functionality
-- [ ] Remove accordions (data now displayed in cards)
+- [x] Keep "Mark as Bought" functionality
+- [x] Remove accordions (data now displayed in cards)
 
 ---
 
