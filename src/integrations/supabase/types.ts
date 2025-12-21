@@ -22,7 +22,7 @@ export type Database = {
           flowering_season: string | null
           growth_habit: string | null
           id: number
-          images: string | null
+          images: string[] | null
           mature_height_width: string | null
           native_region: string | null
           price: number | null
@@ -39,7 +39,7 @@ export type Database = {
           flowering_season?: string | null
           growth_habit?: string | null
           id?: number
-          images?: string | null
+          images?: string[] | null
           mature_height_width?: string | null
           native_region?: string | null
           price?: number | null
@@ -56,7 +56,7 @@ export type Database = {
           flowering_season?: string | null
           growth_habit?: string | null
           id?: number
-          images?: string | null
+          images?: string[] | null
           mature_height_width?: string | null
           native_region?: string | null
           price?: number | null
