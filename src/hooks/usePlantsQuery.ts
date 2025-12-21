@@ -149,7 +149,7 @@ export function useUpdatePlantImage() {
       
       // The images column stores JSON arrays but is typed as string in auto-generated schema.
       // We pass an array which Supabase serializes to JSON automatically.
-      const updatePayload: { images: string } = { images: [imageUrl] as unknown as string };
+      const updatePayload = { images: [imageUrl] as unknown as string[] };
       const { data, error } = await supabase
         .from('nurserydb')
         .update(updatePayload)

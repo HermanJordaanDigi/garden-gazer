@@ -12,8 +12,8 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   {
-    label: "Dashboard",
-    icon: "dashboard",
+    label: "Wishlist",
+    icon: "favorite",
     to: "/",
     isActive: (pathname, searchParams) =>
       pathname === "/" && !searchParams.get("view"),
@@ -23,13 +23,6 @@ const navItems: NavItem[] = [
     icon: "potted_plant",
     to: "/?view=collection",
     isActive: (_, searchParams) => searchParams.get("view") === "collection",
-  },
-  {
-    label: "Wishlist",
-    icon: "favorite",
-    to: "#",
-    isActive: () => false,
-    disabled: true,
   },
   {
     label: "Settings",

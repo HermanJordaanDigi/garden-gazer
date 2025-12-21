@@ -7,7 +7,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { UserProvider } from "@/contexts/UserContext";
 
 // Lazy-loaded route components for code splitting
-const Index = lazy(() => import("./pages/Index"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
 const PlantDetail = lazy(() => import("./pages/PlantDetail"));
 const AddPlant = lazy(() => import("./pages/AddPlant"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -48,7 +48,7 @@ const App = () => (
           <BrowserRouter>
             <Suspense fallback={<PageLoader />}>
               <Routes>
-                <Route path="/" element={<Index />} />
+                <Route path="/" element={<Wishlist />} />
                 <Route path="/plant/:id" element={<PlantDetail />} />
                 <Route path="/add-plant" element={<AddPlant />} />
                 <Route path="/auth" element={<Auth />} />
