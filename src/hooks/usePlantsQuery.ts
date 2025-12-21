@@ -147,9 +147,12 @@ export function useUpdatePlantImage() {
     mutationFn: async ({ plantId, imageUrl }: { plantId: number; imageUrl: string }) => {
       console.log('Starting image update...', { plantId, imageUrl });
       
+      // The images column stores JSON arrays but is typed as string in auto-generated schema.
+      // We pass an array which Supabase serializes to JSON automatically.
+      const updatePayload: { images: string } = { images: [imageUrl] as unknown as string };
       const { data, error } = await supabase
         .from('nurserydb')
-        .update({ images: [imageUrl] } as any)
+        .update(updatePayload)
         .eq('id', plantId)
         .select()
         .single();

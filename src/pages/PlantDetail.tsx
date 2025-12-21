@@ -6,7 +6,7 @@ import {
 } from "@/hooks/usePlantsQuery";
 import { useImageUpload } from "@/hooks/useImageUpload";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
@@ -22,7 +22,6 @@ import { formatPrice } from "@/lib/color";
 export default function PlantDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { data: plant, isLoading } = usePlantById(id || "");
   const updateImageMutation = useUpdatePlantImage();
   const uploadImageMutation = useImageUpload();
@@ -38,21 +37,13 @@ export default function PlantDetail() {
       try {
         finalImageUrl = await uploadImageMutation.mutateAsync(file);
       } catch {
-        toast({
-          title: "Upload Failed",
-          description: "Failed to upload image. Please try again.",
-          variant: "destructive",
-        });
+        toast.error("Failed to upload image. Please try again.");
         return;
       }
     }
 
     if (!finalImageUrl) {
-      toast({
-        title: "Error",
-        description: "Please select an image or enter a URL",
-        variant: "destructive",
-      });
+      toast.error("Please select an image or enter a URL");
       return;
     }
 
@@ -63,16 +54,9 @@ export default function PlantDetail() {
         imageUrl: finalImageUrl,
       });
 
-      toast({
-        title: "Success",
-        description: "Plant image updated successfully",
-      });
+      toast.success("Plant image updated successfully");
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to update plant image",
-        variant: "destructive",
-      });
+      toast.error("Failed to update plant image");
     }
   };
 
@@ -82,21 +66,14 @@ export default function PlantDetail() {
     try {
       await markAsBoughtMutation.mutateAsync(plant.id);
 
-      toast({
-        title: "Success!",
-        description: "Plant added to your collection!",
-      });
+      toast.success("Plant added to your collection!");
 
       // Navigate back to home after a brief delay
       setTimeout(() => {
         navigate("/");
       }, 500);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to mark as bought. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Failed to mark as bought. Please try again.");
     }
   };
 

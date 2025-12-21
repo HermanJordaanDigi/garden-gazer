@@ -2,6 +2,7 @@ import { Plant } from "@/types/plant";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { getPlantInitials } from "@/lib/plant-utils";
 
 interface PlantCardProps {
   plant: Plant;
@@ -9,18 +10,6 @@ interface PlantCardProps {
 
 export function PlantCard({ plant }: PlantCardProps) {
   const navigate = useNavigate();
-
-  const getInitials = () => {
-    const common = plant.common_name || "";
-    const scientific = plant.scientific_name || "";
-    const name = common || scientific;
-    return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
-  };
 
   const handleClick = () => {
     navigate(`/plant/${plant.id}`);
@@ -42,7 +31,7 @@ export function PlantCard({ plant }: PlantCardProps) {
         ) : (
           <div className="flex items-center justify-center w-full h-full">
             <span className="text-5xl font-bold text-woodland-primary/40">
-              {getInitials()}
+              {getPlantInitials(plant.common_name, plant.scientific_name)}
             </span>
           </div>
         )}

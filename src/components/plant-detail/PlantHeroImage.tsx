@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plant } from "@/types/plant";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
+import { getPlantInitials } from "@/lib/plant-utils";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -28,6 +29,18 @@ export function PlantHeroImage({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  // Cleanup blob URLs to prevent memory leaks
+  useEffect(() => {
+    if (selectedFile) {
+      const url = URL.createObjectURL(selectedFile);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [selectedFile]);
 
   const handleSubmit = async () => {
     if (selectedFile) {
@@ -38,18 +51,6 @@ export function PlantHeroImage({
     setIsDialogOpen(false);
     setSelectedFile(null);
     setImageUrl("");
-  };
-
-  const getInitials = () => {
-    const common = plant.common_name || "";
-    const scientific = plant.scientific_name || "";
-    const name = common || scientific;
-    return name
-      .split(" ")
-      .map((word) => word[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
   };
 
   const imageCount = plant.images?.length || 0;
@@ -66,7 +67,7 @@ export function PlantHeroImage({
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <span className="text-6xl font-bold text-woodland-text-muted/30">
-              {getInitials()}
+              {getPlantInitials(plant.common_name, plant.scientific_name)}
             </span>
           </div>
         )}
@@ -123,16 +124,12 @@ export function PlantHeroImage({
               </div>
 
               {/* Preview Section */}
-              {(selectedFile || imageUrl) && (
+              {(previewUrl || imageUrl) && (
                 <div className="grid gap-2">
                   <Label>Preview</Label>
                   <div className="relative h-48 bg-muted rounded-md overflow-hidden">
                     <img
-                      src={
-                        selectedFile
-                          ? URL.createObjectURL(selectedFile)
-                          : imageUrl
-                      }
+                      src={previewUrl || imageUrl}
                       alt="Preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
