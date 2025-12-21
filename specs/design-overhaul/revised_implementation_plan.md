@@ -100,36 +100,36 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 2.1 Create Sidebar Component
 **File**: `src/components/layout/Sidebar.tsx` (new)
 
-- [ ] Create sidebar container (w-72, hidden md:flex)
-- [ ] Add logo/brand section with plant avatar
-- [ ] Implement navigation links:
+- [x] Create sidebar container (w-72, hidden md:flex)
+- [x] Add logo/brand section with plant avatar
+- [x] Implement navigation links:
   | Label | Icon | Route | Active Condition |
   |-------|------|-------|------------------|
   | Dashboard | `dashboard` | `/` | `pathname === '/'` |
   | My Plants | `potted_plant` | `/?view=collection` | `searchParams.get('view') === 'collection'` |
   | Wishlist | `favorite` | `#` | Disabled/stub |
   | Settings | `settings` | `#` | Disabled/stub |
-- [ ] Style active state: `bg-primary/15 text-text-main`
-- [ ] Style hover state: `hover:bg-background-light`
-- [ ] Add "Add Plant" button at bottom (links to `/add-plant`)
+- [x] Style active state: `bg-primary/15 text-text-main`
+- [x] Style hover state: `hover:bg-background-light`
+- [x] Add "Add Plant" button at bottom (links to `/add-plant`)
 
 ### 2.2 Create Header Component
 **File**: `src/components/layout/Header.tsx` (new)
 
-- [ ] Create header bar (sticky, border-bottom)
-- [ ] Add mobile hamburger button (md:hidden)
-- [ ] Add search input with icon:
+- [x] Create header bar (sticky, border-bottom)
+- [x] Add mobile hamburger button (md:hidden)
+- [x] Add search input with icon:
   - Icon: `search`
   - Placeholder: "Search your plants..."
   - Connect to existing `usePlantsQuery` search filter
-- [ ] Add user avatar section (right side):
+- [x] Add user avatar section (right side):
   - Notification button (stub): icon `notifications`
   - Avatar image with name "Sarah"
 
 ### 2.3 Create MainLayout Component
 **File**: `src/components/layout/MainLayout.tsx` (new)
 
-- [ ] Compose Sidebar + Header + children:
+- [x] Compose Sidebar + Header + children:
   ```tsx
   export function MainLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -145,17 +145,17 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
     );
   }
   ```
-- [ ] Add mobile sidebar state management (useState for open/close)
-- [ ] Implement responsive behavior:
+- [x] Add mobile sidebar state management (useState for open/close)
+- [x] Implement responsive behavior:
   - Desktop: Fixed sidebar visible
   - Mobile: Sidebar as slide-out drawer (use Sheet component)
 
 ### 2.4 Create Breadcrumb Component
 **File**: `src/components/layout/Breadcrumb.tsx` (new)
 
-- [ ] Accept `items` prop: `{ label: string; href?: string }[]`
-- [ ] Use Material icon `chevron_right` as separator
-- [ ] Style: muted links, current item in main text color
+- [x] Accept `items` prop: `{ label: string; href?: string }[]`
+- [x] Use Material icon `chevron_right` as separator
+- [x] Style: muted links, current item in main text color
 
 ---
 
