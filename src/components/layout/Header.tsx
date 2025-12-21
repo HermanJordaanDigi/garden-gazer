@@ -1,10 +1,16 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/contexts/UserContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -13,10 +19,11 @@ interface HeaderProps {
 
 export function Header({ onMenuClick, className }: HeaderProps) {
   const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const searchValue = searchParams.get("search") || "";
-  const { user } = useUser();
+  const { user, profile, signOut } = useUser();
 
-  const userName = user?.name || "Guest";
+  const userName = profile?.display_name || user?.email?.split("@")[0] || "Guest";
   const userInitials = userName
     .split(" ")
     .map((n) => n[0])
@@ -33,6 +40,12 @@ export function Header({ onMenuClick, className }: HeaderProps) {
     }
     setSearchParams(newParams);
   };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
+  };
+
 
   return (
     <header
@@ -83,17 +96,33 @@ export function Header({ onMenuClick, className }: HeaderProps) {
           </Button>
 
           {/* User Avatar */}
-          <div className="flex items-center gap-3 ml-2">
-            <Avatar className="h-9 w-9">
-              <AvatarImage src={user?.avatarUrl || ""} alt={userName} />
-              <AvatarFallback className="bg-woodland-primary text-white text-sm">
-                {userInitials}
-              </AvatarFallback>
-            </Avatar>
-            <span className="hidden md:block text-sm font-medium text-woodland-text-main">
-              {userName}
-            </span>
-          </div>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className="flex items-center gap-3 ml-2 cursor-pointer">
+                  <Avatar className="h-9 w-9">
+                    <AvatarImage src={profile?.avatar_url || ""} alt={userName} />
+                    <AvatarFallback className="bg-woodland-primary text-white text-sm">
+                      {userInitials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden md:block text-sm font-medium text-woodland-text-main">
+                    {userName}
+                  </span>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <MaterialIcon name="logout" size="sm" className="mr-2" />
+                  Sign out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button variant="outline" onClick={() => navigate("/auth")}>
+              Sign in
+            </Button>
+          )}
         </div>
       </div>
     </header>

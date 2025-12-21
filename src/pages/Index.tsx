@@ -22,12 +22,12 @@ const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
 
 export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const { user } = useUser();
+  const { profile, user } = useUser();
 
   // Read view mode and search from URL
   const view = searchParams.get("view") || "searches";
   const searchValue = searchParams.get("search") || "";
-  const userName = user?.name?.split(" ")[0] || "there";
+  const userName = profile?.display_name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
 
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,

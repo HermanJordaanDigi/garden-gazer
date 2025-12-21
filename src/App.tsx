@@ -11,6 +11,7 @@ const Index = lazy(() => import("./pages/Index"));
 const PlantDetail = lazy(() => import("./pages/PlantDetail"));
 const AddPlant = lazy(() => import("./pages/AddPlant"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Auth = lazy(() => import("./pages/Auth"));
 
 // Loading fallback component
 function PageLoader() {
@@ -50,6 +51,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/plant/:id" element={<PlantDetail />} />
                 <Route path="/add-plant" element={<AddPlant />} />
+                <Route path="/auth" element={<Auth />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
