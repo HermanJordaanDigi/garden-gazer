@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { toast } from "sonner";
+import { MainLayout } from "@/components/layout/MainLayout";
+import { MaterialIcon } from "@/components/ui/MaterialIcon";
+import { Breadcrumb } from "@/components/layout/Breadcrumb";
 
 const formSchema = z.object({
   scientific_name: z.string()
@@ -75,27 +77,29 @@ export default function AddPlant() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="sticky top-0 z-10 shadow-md" style={{ backgroundColor: '#738678' }}>
-        <div className="container max-w-6xl mx-auto px-4 py-3">
-          <div className="flex items-center gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/")}
-              className="text-white hover:bg-white/20"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <h1 className="font-bold text-white text-xl">Add New Plant</h1>
-          </div>
-        </div>
-      </header>
+    <MainLayout>
+      <div className="max-w-2xl mx-auto w-full">
+        {/* Breadcrumb */}
+        <Breadcrumb
+          items={[
+            { label: "Dashboard", href: "/" },
+            { label: "Add New Plant" },
+          ]}
+          className="mb-6"
+        />
 
-      {/* Content */}
-      <main className="container max-w-2xl mx-auto px-4 py-8">
-        <div className="bg-card rounded-lg shadow-sm border border-border p-6">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight text-woodland-text-main">
+            Add New Plant
+          </h1>
+          <p className="text-woodland-text-muted mt-2">
+            Enter the scientific name to add a new plant to your collection.
+          </p>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-white rounded-2xl shadow-sm border border-woodland-border-light p-8">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
@@ -103,12 +107,13 @@ export default function AddPlant() {
                 name="scientific_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Scientific Name</FormLabel>
+                    <FormLabel className="text-woodland-text-main">Scientific Name</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="e.g., Quercus robur"
                         {...field}
                         disabled={isSubmitting}
+                        className="border-woodland-border-light focus:border-woodland-primary focus:ring-woodland-primary/20"
                       />
                     </FormControl>
                     <FormMessage />
@@ -121,7 +126,7 @@ export default function AddPlant() {
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Price (optional)</FormLabel>
+                    <FormLabel className="text-woodland-text-main">Price (optional)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -129,6 +134,7 @@ export default function AddPlant() {
                         placeholder="e.g., 15.99"
                         {...field}
                         disabled={isSubmitting}
+                        className="border-woodland-border-light focus:border-woodland-primary focus:ring-woodland-primary/20"
                       />
                     </FormControl>
                     <FormMessage />
@@ -136,13 +142,15 @@ export default function AddPlant() {
                 )}
               />
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 pt-4">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1"
+                  className="flex-1 bg-woodland-primary hover:bg-woodland-primary/90 text-white"
                 >
-                  {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  {isSubmitting && (
+                    <MaterialIcon name="progress_activity" className="mr-2 animate-spin" size="sm" />
+                  )}
                   {isSubmitting ? "Submitting..." : "Submit Plant"}
                 </Button>
                 <Button
@@ -150,6 +158,7 @@ export default function AddPlant() {
                   variant="outline"
                   onClick={() => navigate("/")}
                   disabled={isSubmitting}
+                  className="border-woodland-border-light text-woodland-text-main hover:bg-woodland-background-light"
                 >
                   Cancel
                 </Button>
@@ -157,7 +166,7 @@ export default function AddPlant() {
             </form>
           </Form>
         </div>
-      </main>
-    </div>
+      </div>
+    </MainLayout>
   );
 }

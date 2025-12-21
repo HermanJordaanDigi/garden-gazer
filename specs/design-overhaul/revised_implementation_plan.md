@@ -361,8 +361,8 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 5.1 Update Routing Logic
 **File**: `src/App.tsx`
 
-- [ ] No changes needed to routes
-- [ ] Routes remain:
+- [x] No changes needed to routes
+- [x] Routes remain:
   - `/` - Index (Dashboard/My Plants)
   - `/plant/:id` - PlantDetail
   - `/add-plant` - AddPlant
@@ -370,54 +370,54 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 5.2 Connect Search to Header
 **File**: `src/components/layout/Header.tsx`
 
-- [ ] Add search state management
-- [ ] Options:
+- [x] Add search state management
+- [x] Options:
   1. Lift state to MainLayout and pass down
-  2. Use URL query params (`?search=...`)
+  2. Use URL query params (`?search=...`) ✓ (implemented)
   3. Use React context
-- [ ] **Recommendation**: Use URL query params for shareable/bookmarkable state
-- [ ] Update `usePlantsQuery` to read search from URL
+- [x] **Recommendation**: Use URL query params for shareable/bookmarkable state
+- [x] Update `usePlantsQuery` to read search from URL
 
 ### 5.3 Connect Sidebar Navigation
 **File**: `src/components/layout/Sidebar.tsx`
 
-- [ ] Use `react-router-dom` `Link` and `useLocation`
-- [ ] Dashboard link: `to="/"`
-- [ ] My Plants link: `to="/?view=collection"`
-- [ ] Highlight active link based on current path/params
+- [x] Use `react-router-dom` `Link` and `useLocation`
+- [x] Dashboard link: `to="/"`
+- [x] My Plants link: `to="/?view=collection"`
+- [x] Highlight active link based on current path/params
 
 ---
 
 ## Phase 6: Polish & Testing
 
 ### 6.1 Responsive Testing
-- [ ] Test on mobile viewport (375px)
-- [ ] Test on tablet viewport (768px)
-- [ ] Test on desktop viewport (1280px+)
-- [ ] Ensure sidebar drawer works on mobile
-- [ ] Verify grid layouts collapse correctly
+- [x] Test on mobile viewport (375px)
+- [x] Test on tablet viewport (768px)
+- [x] Test on desktop viewport (1280px+)
+- [x] Ensure sidebar drawer works on mobile
+- [x] Verify grid layouts collapse correctly
 
 ### 6.2 Dark Mode Support
-- [ ] Verify all new colors work in dark mode
-- [ ] Test toggle between light/dark (if implemented)
-- [ ] Ensure sufficient contrast in both modes
+- [x] Verify all new colors work in dark mode
+- [x] Test toggle between light/dark (if implemented)
+- [x] Ensure sufficient contrast in both modes
 
 ### 6.3 Accessibility Audit
-- [ ] Add aria-labels to icon-only buttons
-- [ ] Ensure keyboard navigation works
-- [ ] Test with screen reader (basic check)
-- [ ] Verify focus states are visible
+- [x] Add aria-labels to icon-only buttons
+- [x] Ensure keyboard navigation works
+- [x] Test with screen reader (basic check)
+- [x] Verify focus states are visible
 
 ### 6.4 Performance Check
-- [ ] Verify infinite scroll still works
-- [ ] Check image loading performance
-- [ ] Test data fetching on slow network
+- [x] Verify infinite scroll still works
+- [x] Check image loading performance
+- [x] Test data fetching on slow network
 
 ### 6.5 Clean Up
-- [ ] Remove unused Lucide icon imports (replace with MaterialIcon)
-- [ ] Remove old InfoTile component (if replaced)
-- [ ] Remove old FilterChips component (if replaced)
-- [ ] Update any remaining Epilogue font references
+- [x] Remove unused Lucide icon imports (replace with MaterialIcon)
+- [x] Remove old InfoTile component (if replaced)
+- [x] Remove old FilterChips component (if replaced)
+- [x] Update any remaining Epilogue font references
 
 ---
 
