@@ -1,36 +1,47 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { usePlantsQuery } from "@/hooks/usePlantsQuery";
 import { PlantCard } from "@/components/PlantCard";
 import { PlantSkeleton } from "@/components/PlantSkeleton";
+import { MainLayout } from "@/components/layout/MainLayout";
+import { WeatherWidget } from "@/components/dashboard/WeatherWidget";
+import { AddPlantCard } from "@/components/dashboard/AddPlantCard";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Filter, ChevronUp, ChevronDown, Leaf, Plus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { useInView } from "react-intersection-observer";
+import { cn } from "@/lib/utils";
+
 const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
-const sunOptions = ["Full Sun", "Partial Shade", "Shade"];
-const windOptions = ["High", "Moderate", "Low"];
+
 export default function Index() {
-  const navigate = useNavigate();
-  const [viewMode, setViewMode] = useState<'searches' | 'collection'>('searches');
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Read view mode and search from URL
+  const view = searchParams.get("view") || "searches";
+  const searchValue = searchParams.get("search") || "";
+
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,
     sunExposure: undefined as string | undefined,
     windTolerance: undefined as string | undefined,
-    floweringSeason: undefined as string | undefined
+    floweringSeason: undefined as string | undefined,
   });
+
   const [sort, setSort] = useState<{
-    field: 'common_name' | 'price' | 'id';
-    direction: 'asc' | 'desc';
+    field: "common_name" | "price" | "id";
+    direction: "asc" | "desc";
   }>({
-    field: 'common_name',
-    direction: 'asc'
+    field: "common_name",
+    direction: "asc",
   });
-  const {
-    ref: loadMoreRef,
-    inView
-  } = useInView();
+
+  const { ref: loadMoreRef, inView } = useInView();
 
   const {
     data,
@@ -38,14 +49,13 @@ export default function Index() {
     hasNextPage,
     isFetchingNextPage,
     isLoading,
-    refetch,
-    isFetching
   } = usePlantsQuery({
     filters: {
       ...filters,
-      bought: viewMode === 'collection'
+      search: searchValue || undefined,
+      bought: view === "collection",
     },
-    sort
+    sort,
   });
 
   // Load more when scrolling to bottom
@@ -54,186 +64,174 @@ export default function Index() {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-  const allPlants = data?.pages.flatMap(page => page.plants) || [];
-  const totalCount = data?.pages[0]?.totalCount || 0;
+
+  const allPlants = data?.pages.flatMap((page) => page.plants) || [];
 
   const getSortLabel = () => {
-    if (sort.field === 'common_name') {
-      return sort.direction === 'asc' ? 'Common Name (A-Z)' : 'Common Name (Z-A)';
+    if (sort.field === "common_name") {
+      return sort.direction === "asc" ? "Name (A-Z)" : "Name (Z-A)";
     }
-    if (sort.field === 'price') {
-      return sort.direction === 'asc' ? 'Price: Low → High' : 'Price: High → Low';
+    if (sort.field === "price") {
+      return sort.direction === "asc" ? "Price ↑" : "Price ↓";
     }
-    return 'Recently Added';
+    return "Recent";
   };
 
-  return <div className="min-h-screen bg-background">
-      {/* Header - Green background like screenshot */}
-      <header className="sticky top-0 z-10 shadow-md" style={{ backgroundColor: '#738678' }}>
-        <div className="container max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between gap-4">
-            {/* Left: Title */}
-            <h1 className="font-bold text-white text-xl">Plants</h1>
-            
-            {/* Center: Toggle */}
-            <ToggleGroup 
-              type="single" 
-              value={viewMode} 
-              onValueChange={(value) => value && setViewMode(value as 'searches' | 'collection')}
-              className="bg-white/90 rounded-lg p-1"
-            >
-              <ToggleGroupItem value="searches" className="px-6">
-                Searches
-              </ToggleGroupItem>
-              <ToggleGroupItem value="collection" className="px-6">
-                Collection
-              </ToggleGroupItem>
-            </ToggleGroup>
-            
-            {/* Right: Add button */}
-            <Button 
-              size="icon" 
-              variant="ghost" 
-              onClick={() => navigate("/add-plant")}
-              className="text-white hover:bg-white/20"
-            >
-              <Plus className="w-5 h-5" />
-            </Button>
-          </div>
-        </div>
-      </header>
+  // Update type filter
+  const handleTypeFilter = (type: string | undefined) => {
+    setFilters((prev) => ({ ...prev, type }));
+  };
 
-      {/* Sort and Filters Section */}
-      <div className="sticky top-[72px] z-10 bg-background border-b border-border">
-        <div className="container max-w-6xl mx-auto px-4 py-2">
+  // Get greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good Morning";
+    if (hour < 17) return "Good Afternoon";
+    return "Good Evening";
+  };
+
+  return (
+    <MainLayout>
+      {/* Greeting Section */}
+      <section className="max-w-7xl mx-auto w-full pt-2">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+          <div>
+            <h1 className="text-4xl font-bold tracking-tight text-woodland-text-main">
+              {getGreeting()}, Sarah
+            </h1>
+            <p className="text-woodland-text-muted mt-2 text-lg font-light">
+              Here's what's happening in your jungle today.
+            </p>
+          </div>
+          <WeatherWidget />
+        </div>
+      </section>
+
+      {/* Filter Section */}
+      <section className="max-w-7xl mx-auto w-full mb-6">
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Type Filter Pills */}
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => handleTypeFilter(undefined)}
+              className={cn(
+                "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+                filters.type === undefined
+                  ? "bg-woodland-primary text-white"
+                  : "bg-woodland-surface-light text-woodland-text-main hover:bg-woodland-background-light border border-woodland-border-light"
+              )}
+            >
+              All
+            </button>
+            {typeOptions.map((type) => (
+              <button
+                key={type}
+                onClick={() =>
+                  handleTypeFilter(filters.type === type ? undefined : type)
+                }
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-medium transition-colors",
+                  filters.type === type
+                    ? "bg-woodland-primary text-white"
+                    : "bg-woodland-surface-light text-woodland-text-main hover:bg-woodland-background-light border border-woodland-border-light"
+                )}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+
+          {/* Spacer */}
+          <div className="flex-1" />
+
           {/* Sort Dropdown */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="w-full justify-between mb-2 h-9 text-sm">
-                <span>Sort by: {getSortLabel()}</span>
-                <div className="flex flex-col">
-                  <ChevronUp className="w-4 h-4 -mb-2" />
-                  <ChevronDown className="w-4 h-4" />
-                </div>
+              <Button
+                variant="outline"
+                className="border-woodland-border-light bg-woodland-surface-light text-woodland-text-main hover:bg-woodland-background-light"
+              >
+                <MaterialIcon name="sort" size="sm" className="mr-2" />
+                {getSortLabel()}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-[calc(100vw-2rem)] max-w-[calc(1536px-2rem)]">
-              <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'asc' })}>
-                Common Name (A-Z)
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => setSort({ field: "common_name", direction: "asc" })}
+              >
+                Name (A-Z)
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSort({ field: 'common_name', direction: 'desc' })}>
-                Common Name (Z-A)
+              <DropdownMenuItem
+                onClick={() => setSort({ field: "common_name", direction: "desc" })}
+              >
+                Name (Z-A)
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'asc' })}>
+              <DropdownMenuItem
+                onClick={() => setSort({ field: "price", direction: "asc" })}
+              >
                 Price: Low → High
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSort({ field: 'price', direction: 'desc' })}>
+              <DropdownMenuItem
+                onClick={() => setSort({ field: "price", direction: "desc" })}
+              >
                 Price: High → Low
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setSort({ field: 'id', direction: 'desc' })}>
+              <DropdownMenuItem
+                onClick={() => setSort({ field: "id", direction: "desc" })}
+              >
                 Recently Added
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
-          {/* Filter Dropdowns */}
-          <div className="flex gap-2">
-            {/* Type Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-8 text-xs px-3 bg-background">
-                  {filters.type || "Type"}
-                  <ChevronDown className="w-3 h-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="z-50">
-                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, type: undefined }))}>
-                  All Types
-                </DropdownMenuItem>
-                {typeOptions.map(option => (
-                  <DropdownMenuItem 
-                    key={option}
-                    onClick={() => setFilters(prev => ({ ...prev, type: option }))}
-                  >
-                    {option}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Sun Exposure Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-8 text-xs px-3 bg-background">
-                  {filters.sunExposure || "Sun Exposure"}
-                  <ChevronDown className="w-3 h-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="z-50">
-                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, sunExposure: undefined }))}>
-                  All Exposures
-                </DropdownMenuItem>
-                {sunOptions.map(option => (
-                  <DropdownMenuItem 
-                    key={option}
-                    onClick={() => setFilters(prev => ({ ...prev, sunExposure: option }))}
-                  >
-                    {option}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Wind Tolerance Filter */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="h-8 text-xs px-3 bg-background">
-                  {filters.windTolerance || "Wind Tolerance"}
-                  <ChevronDown className="w-3 h-3 ml-1" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="z-50">
-                <DropdownMenuItem onClick={() => setFilters(prev => ({ ...prev, windTolerance: undefined }))}>
-                  All Tolerances
-                </DropdownMenuItem>
-                {windOptions.map(option => (
-                  <DropdownMenuItem 
-                    key={option}
-                    onClick={() => setFilters(prev => ({ ...prev, windTolerance: option }))}
-                  >
-                    {option}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
         </div>
-      </div>
+      </section>
 
       {/* Content */}
-      <main className="container max-w-6xl mx-auto px-4 py-6">
-        {isLoading ? <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({
-          length: 6
-        }).map((_, i) => <PlantSkeleton key={i} />)}
-          </div> : allPlants.length === 0 ? <div className="text-center py-16">
-            <Leaf className="w-16 h-16 text-muted-foreground mx-auto mb-4 opacity-50" />
-            <h3 className="text-lg font-semibold mb-2">No plants found</h3>
-            <p className="text-muted-foreground">Try adjusting your filters or search</p>
-          </div> : <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {allPlants.map(plant => <PlantCard key={plant.id} plant={plant} />)}
+      <section className="max-w-7xl mx-auto w-full">
+        {isLoading ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <PlantSkeleton key={i} />
+            ))}
+          </div>
+        ) : allPlants.length === 0 ? (
+          <div className="text-center py-16">
+            <MaterialIcon
+              name="potted_plant"
+              size="xl"
+              className="text-woodland-text-muted mx-auto mb-4 opacity-50"
+            />
+            <h3 className="text-lg font-semibold mb-2 text-woodland-text-main">
+              No plants found
+            </h3>
+            <p className="text-woodland-text-muted">
+              Try adjusting your filters or search
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {allPlants.map((plant) => (
+                <PlantCard key={plant.id} plant={plant} />
+              ))}
+              <AddPlantCard />
             </div>
 
             {/* Load More Trigger */}
-            {hasNextPage && <div ref={loadMoreRef} className="mt-8 flex justify-center">
-                {isFetchingNextPage && <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-                    {Array.from({
-              length: 3
-            }).map((_, i) => <PlantSkeleton key={i} />)}
-                  </div>}
-              </div>}
-          </>}
-      </main>
-    </div>;
+            {hasNextPage && (
+              <div ref={loadMoreRef} className="mt-8 flex justify-center">
+                {isFetchingNextPage && (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full">
+                    {Array.from({ length: 2 }).map((_, i) => (
+                      <PlantSkeleton key={i} />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
+      </section>
+    </MainLayout>
+  );
 }

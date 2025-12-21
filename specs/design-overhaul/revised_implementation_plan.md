@@ -164,9 +164,9 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 3.1 Refactor Index Page
 **File**: `src/pages/Index.tsx`
 
-- [ ] Wrap content in `<MainLayout>`
-- [ ] Remove existing header (moved to MainLayout)
-- [ ] Update URL handling:
+- [x] Wrap content in `<MainLayout>`
+- [x] Remove existing header (moved to MainLayout)
+- [x] Update URL handling:
   - Use `?view=collection` query param instead of local state
   - Read view mode from URL: `const view = searchParams.get('view')`
   - Update `usePlantsQuery` filter: `bought: view === 'collection'`
@@ -174,7 +174,7 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 3.2 Add Greeting Section
 **File**: `src/pages/Index.tsx` (continued)
 
-- [ ] Add greeting section at top of content:
+- [x] Add greeting section at top of content:
   ```tsx
   <section className="max-w-7xl mx-auto w-full pt-2">
     <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
@@ -192,34 +192,34 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 3.3 Create Weather Widget Component
 **File**: `src/components/dashboard/WeatherWidget.tsx` (new)
 
-- [ ] Display mock weather data:
+- [x] Display mock weather data:
   - Temperature: 24°C
   - Humidity: 65%
-- [ ] Icon: `wb_sunny`
-- [ ] Styling: Surface background, rounded-xl, shadow-sm
+- [x] Icon: `wb_sunny`
+- [x] Styling: Surface background, rounded-xl, shadow-sm
 
 ### 3.4 Update Filter Section
 **File**: `src/pages/Index.tsx` (continued)
 
-- [ ] Replace dropdown filters with pill buttons:
+- [x] Replace dropdown filters with pill buttons:
   - "All" (active: primary bg, white text)
   - Type-based filters from existing typeOptions
-- [ ] Style as horizontal scroll on mobile
-- [ ] Add Sort button with icon `sort`
-- [ ] Keep existing filter logic, just update UI
+- [x] Style as horizontal scroll on mobile
+- [x] Add Sort button with icon `sort`
+- [x] Keep existing filter logic, just update UI
 
 ### 3.5 Create New PlantCard (Dashboard Version)
 **File**: `src/components/PlantCard.tsx`
 
-- [ ] Update card styling:
+- [x] Update card styling:
   - `rounded-3xl` border radius
   - `overflow-hidden`
   - Hover: `shadow-xl`, `-translate-y-1`
   - `border border-border-light/50`
-- [ ] Image section:
+- [x] Image section:
   - `aspect-[4/3]`
   - Hover: `scale-105` with transition
-- [ ] Content section (`p-8`):
+- [x] Content section (`p-8`):
   - Common name: `text-2xl font-bold`
   - Scientific name: `text-base italic text-muted`
   - Remove badges and attributes (simpler card)
@@ -229,18 +229,18 @@ This plan provides detailed, actionable steps for implementing the Garden Gazer 
 ### 3.6 Create AddPlantCard Component
 **File**: `src/components/dashboard/AddPlantCard.tsx` (new)
 
-- [ ] Dashed border card matching grid item size
-- [ ] Plus icon in circular container
-- [ ] "Add New Plant" text
-- [ ] "Grow your jungle" subtitle
-- [ ] onClick navigates to `/add-plant`
+- [x] Dashed border card matching grid item size
+- [x] Plus icon in circular container
+- [x] "Add New Plant" text
+- [x] "Grow your jungle" subtitle
+- [x] onClick navigates to `/add-plant`
 
 ### 3.7 Update Grid Layout
 **File**: `src/pages/Index.tsx`
 
-- [ ] Change grid to 2 columns on desktop: `lg:grid-cols-2`
-- [ ] Increase gap: `gap-10`
-- [ ] Add `<AddPlantCard />` as last grid item
+- [x] Change grid to 2 columns on desktop: `lg:grid-cols-2`
+- [x] Increase gap: `gap-10`
+- [x] Add `<AddPlantCard />` as last grid item
 
 ---
 

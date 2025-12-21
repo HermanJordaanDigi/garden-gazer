@@ -1,70 +1,77 @@
 import { Plant } from "@/types/plant";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Sun, Wind, Sprout } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+
 interface PlantCardProps {
   plant: Plant;
 }
-export function PlantCard({
-  plant
-}: PlantCardProps) {
+
+export function PlantCard({ plant }: PlantCardProps) {
   const navigate = useNavigate();
+
   const getInitials = () => {
     const common = plant.common_name || "";
     const scientific = plant.scientific_name || "";
     const name = common || scientific;
-    return name.split(" ").map(word => word[0]).join("").toUpperCase().slice(0, 2);
+    return name
+      .split(" ")
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
   };
+
   const handleClick = () => {
     navigate(`/plant/${plant.id}`);
   };
-  return <Card className="overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg border-border/50 active:scale-[0.98]" onClick={handleClick}>
+
+  return (
+    <Card
+      className="overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-xl hover:-translate-y-1 border border-woodland-border-light/50 rounded-3xl bg-woodland-surface-light"
+      onClick={handleClick}
+    >
       {/* Hero Image */}
-      <div className="relative h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
-        {plant.images?.[0] ? <img src={plant.images[0]} alt={plant.common_name || "Plant"} className="w-full h-full object-cover" /> : <div className="text-4xl font-bold text-primary/40">
-            {getInitials()}
-          </div>}
+      <div className="relative aspect-[4/3] bg-gradient-to-br from-woodland-primary/20 to-woodland-background-light overflow-hidden">
+        {plant.images?.[0] ? (
+          <img
+            src={plant.images[0]}
+            alt={plant.common_name || "Plant"}
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+        ) : (
+          <div className="flex items-center justify-center w-full h-full">
+            <span className="text-5xl font-bold text-woodland-primary/40">
+              {getInitials()}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Content */}
-      <div className="p-4 space-y-3">
+      <div className="p-8 space-y-4">
         {/* Title */}
         <div>
-          <h3 className="font-semibold text-lg leading-tight text-foreground">
+          <h3 className="text-2xl font-bold leading-tight text-woodland-text-main">
             {plant.common_name || "Unknown Plant"}
           </h3>
-          <p className="text-sm italic text-muted-foreground mt-0.5">
+          <p className="text-base italic text-woodland-text-muted mt-1">
             {plant.scientific_name || "—"}
           </p>
         </div>
 
-        {/* Pills */}
-        <div className="flex flex-wrap gap-2">
-          {plant.native_region && <Badge variant="secondary" className="text-xs text-white bg-[#386641]">
-              {plant.native_region}
-            </Badge>}
-          {plant.type && <Badge variant="outline" className="text-xs">
-              {plant.type}
-            </Badge>}
-        </div>
-
-        {/* Key Attributes */}
-        <div className="flex items-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border/50">
-          {plant.sun_exposure && <div className="flex items-center gap-1.5">
-              <Sun className="w-4 h-4" />
-              <span className="line-clamp-1">{plant.sun_exposure}</span>
-            </div>}
-          {plant.wind_tolerance && <div className="flex items-center gap-1.5">
-              <Wind className="w-4 h-4" />
-              <span className="line-clamp-1">{plant.wind_tolerance}</span>
-            </div>}
-          {plant.growth_habit && <div className="flex items-center gap-1.5">
-              <Sprout className="w-4 h-4" />
-              <span className="line-clamp-1">{plant.growth_habit}</span>
-            </div>}
-        </div>
+        {/* View Details Button */}
+        <Button
+          variant="outline"
+          className="w-full border-woodland-border-light text-woodland-text-main hover:bg-woodland-primary hover:text-white hover:border-woodland-primary transition-colors"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleClick();
+          }}
+        >
+          View Details
+        </Button>
       </div>
-    </Card>;
+    </Card>
+  );
 }
