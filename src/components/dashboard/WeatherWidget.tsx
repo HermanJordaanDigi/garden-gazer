@@ -1,14 +1,46 @@
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
+import { useWeather, getWeatherIcon } from "@/hooks/useWeather";
 
 export function WeatherWidget() {
+  const { data: weather, isLoading, isError } = useWeather();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-4 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light animate-pulse">
+        <div className="w-12 h-12 rounded-full bg-woodland-background-light" />
+        <div className="flex flex-col gap-2">
+          <div className="w-16 h-6 bg-woodland-background-light rounded" />
+          <div className="w-24 h-4 bg-woodland-background-light rounded" />
+        </div>
+      </div>
+    );
+  }
+
+  if (isError || !weather) {
+    return (
+      <div className="flex items-center gap-4 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light">
+        <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-50">
+          <MaterialIcon name="cloud_off" className="text-gray-400" size="xl" />
+        </div>
+        <div className="flex flex-col">
+          <span className="text-lg font-medium text-woodland-text-muted">Weather unavailable</span>
+        </div>
+      </div>
+    );
+  }
+
+  const iconName = getWeatherIcon(weather.weatherCode, weather.isDay);
+  const iconBgClass = weather.isDay ? "bg-amber-50" : "bg-indigo-50";
+  const iconColorClass = weather.isDay ? "text-amber-500" : "text-indigo-400";
+
   return (
     <div className="flex items-center gap-4 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light">
-      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-amber-50">
-        <MaterialIcon name="wb_sunny" className="text-amber-500" size="xl" />
+      <div className={`flex items-center justify-center w-12 h-12 rounded-full ${iconBgClass}`}>
+        <MaterialIcon name={iconName} className={iconColorClass} size="xl" />
       </div>
       <div className="flex flex-col">
-        <span className="text-2xl font-semibold text-woodland-text-main">24°C</span>
-        <span className="text-sm text-woodland-text-muted">Humidity: 65%</span>
+        <span className="text-2xl font-semibold text-woodland-text-main">{weather.temperature}°C</span>
+        <span className="text-sm text-woodland-text-muted">Humidity: {weather.humidity}%</span>
       </div>
     </div>
   );

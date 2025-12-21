@@ -1,11 +1,28 @@
+import { lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import PlantDetail from "./pages/PlantDetail";
-import AddPlant from "./pages/AddPlant";
-import NotFound from "./pages/NotFound";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { UserProvider } from "@/contexts/UserContext";
+
+// Lazy-loaded route components for code splitting
+const Index = lazy(() => import("./pages/Index"));
+const PlantDetail = lazy(() => import("./pages/PlantDetail"));
+const AddPlant = lazy(() => import("./pages/AddPlant"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+
+// Loading fallback component
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-woodland-background-light">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-10 h-10 border-4 border-woodland-primary border-t-transparent rounded-full animate-spin" />
+        <span className="text-woodland-text-muted">Loading...</span>
+      </div>
+    </div>
+  );
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,18 +40,24 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/plant/:id" element={<PlantDetail />} />
-          <Route path="/add-plant" element={<AddPlant />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <UserProvider>
+      <TooltipProvider>
+        <ErrorBoundary>
+          <Toaster />
+          <BrowserRouter>
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/plant/:id" element={<PlantDetail />} />
+                <Route path="/add-plant" element={<AddPlant />} />
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </ErrorBoundary>
+      </TooltipProvider>
+    </UserProvider>
   </QueryClientProvider>
 );
 

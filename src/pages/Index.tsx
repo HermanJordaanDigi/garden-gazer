@@ -16,15 +16,18 @@ import {
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { useInView } from "react-intersection-observer";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/contexts/UserContext";
 
 const typeOptions = ["Perennial", "Evergreen", "Deciduous"];
 
 export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { user } = useUser();
 
   // Read view mode and search from URL
   const view = searchParams.get("view") || "searches";
   const searchValue = searchParams.get("search") || "";
+  const userName = user?.name?.split(" ")[0] || "there";
 
   const [filters, setFilters] = useState({
     type: undefined as string | undefined,
@@ -97,7 +100,7 @@ export default function Index() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
           <div>
             <h1 className="text-4xl font-bold tracking-tight text-woodland-text-main">
-              {getGreeting()}, Sarah
+              {getGreeting()}, {userName}
             </h1>
             <p className="text-woodland-text-muted mt-2 text-lg font-light">
               Here's what's happening in your jungle today.

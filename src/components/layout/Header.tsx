@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { useUser } from "@/contexts/UserContext";
 
 interface HeaderProps {
   onMenuClick?: () => void;
@@ -13,6 +14,15 @@ interface HeaderProps {
 export function Header({ onMenuClick, className }: HeaderProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const searchValue = searchParams.get("search") || "";
+  const { user } = useUser();
+
+  const userName = user?.name || "Guest";
+  const userInitials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 
   const handleSearchChange = (value: string) => {
     const newParams = new URLSearchParams(searchParams);
@@ -75,13 +85,13 @@ export function Header({ onMenuClick, className }: HeaderProps) {
           {/* User Avatar */}
           <div className="flex items-center gap-3 ml-2">
             <Avatar className="h-9 w-9">
-              <AvatarImage src="" alt="Sarah" />
+              <AvatarImage src={user?.avatarUrl || ""} alt={userName} />
               <AvatarFallback className="bg-woodland-primary text-white text-sm">
-                S
+                {userInitials}
               </AvatarFallback>
             </Avatar>
             <span className="hidden md:block text-sm font-medium text-woodland-text-main">
-              Sarah
+              {userName}
             </span>
           </div>
         </div>
