@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plant Mom Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                    // Muted Woodland Palette - Refined based on "desaturated sage green" and "natural linen"
+                    "primary": "#7A9E5C", // Softer, more muted green for accents
+                    "background-light": "#E8ECE6", // A very light, desaturated sage/moss
+                    "background-dark": "#2A332A", // Dark moss for dark mode
+                    "surface-light": "#F2F4F0", // Light grey-green/linen for cards
+                    "surface-dark": "#3A453A", // Darker moss for dark mode cards
+                    "border-light": "#DCE0D9", // Subtle border
+                    "border-dark": "#4F5E4F", // Dark mode border
+                    "text-main": "#3E4A3B", // Dark olive/charcoal for main text
+                    "text-muted": "#7C8C74", // Muted sage for secondary text
+                    "text-white-muted": "#D6DED5" // Muted white
+                },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem"},
+            },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-main dark:text-white-muted h-screen overflow-hidden flex transition-colors duration-200">
+<aside class="w-72 hidden md:flex flex-col bg-surface-light dark:bg-surface-dark border-r border-border-light dark:border-border-dark h-full flex-shrink-0 z-20">
+<div class="p-8 pb-2">
+<div class="flex gap-4 items-center mb-10">
+<div class="bg-center bg-no-repeat bg-cover rounded-full size-12 shadow-sm border-2 border-primary" data-alt="Close up of a monstera leaf texture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCK2IBA_B-OB_A-SYqgX1harWQF5p81U7cAff3KuUaPo5RytZrSqcaBdY8GYZuNzumHVH8s63_bDnnwfdykHEnBD_7OA04a8a5iiAE2V7X2SHYJCS8ENc201Ym9kaZviT7-PZT0mVjD6WTEXnNWVyRhlAqpgTGqXzpxPDPRYt4vou2DFbZUkVdBGLNV4QDgSd14Dpso09324O4z4R_HNrEg7Lhn5TmSx8snbMoO3hcJSx8v3AWelOY-ZkHKeggkTQmJMtcdmJ48mxIs");'></div>
+<div class="flex flex-col">
+<h1 class="text-text-main dark:text-white-muted text-lg font-bold leading-tight tracking-tight">Plant Mom</h1>
+<p class="text-text-muted dark:text-text-white-muted/80 text-[10px] font-bold uppercase tracking-widest mt-0.5">My Jungle</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-4 px-4 py-3.5 rounded-xl bg-primary/15 dark:bg-primary/20 text-text-main dark:text-white-muted group transition-all" href="#">
+<span class="material-symbols-outlined text-primary dark:text-primary fill-1">dashboard</span>
+<p class="text-sm font-semibold leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-background-light dark:hover:bg-white/5 text-text-muted dark:text-text-white-muted/80 transition-all hover:text-text-main" href="#">
+<span class="material-symbols-outlined">potted_plant</span>
+<p class="text-sm font-medium leading-normal">My Plants</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-background-light dark:hover:bg-white/5 text-text-muted dark:text-text-white-muted/80 transition-all hover:text-text-main" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<p class="text-sm font-medium leading-normal">Wishlist</p>
+</a>
+<a class="flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-background-light dark:hover:bg-white/5 text-text-muted dark:text-text-white-muted/80 transition-all hover:text-text-main" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-8">
+<button class="w-full flex items-center justify-center gap-2 rounded-xl h-12 bg-primary hover:bg-primary/90 text-white dark:text-white text-sm font-bold tracking-wide transition-all shadow-lg shadow-primary/20 active:scale-95">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Add Plant</span>
+</button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col h-full overflow-hidden relative">
+<header class="flex-shrink-0 flex items-center justify-between px-8 py-5 bg-background-light dark:bg-background-dark/95 border-b border-transparent backdrop-blur-md sticky top-0 z-10">
+<button class="md:hidden p-2 text-text-main dark:text-white-muted">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex flex-1 max-w-lg">
+<div class="relative w-full group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-text-muted dark:text-text-white-muted/70 text-[20px]">search</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3 border-none rounded-2xl leading-5 bg-surface-light dark:bg-surface-dark text-text-main dark:text-white-muted placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-primary/30 sm:text-sm shadow-sm transition-all" placeholder="Search your plants..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 ml-auto">
+<button class="relative p-3 rounded-2xl bg-surface-light dark:bg-surface-dark text-text-main dark:text-white-muted hover:bg-white dark:hover:bg-white/10 transition-colors shadow-sm group">
+<span class="material-symbols-outlined text-[22px] group-hover:text-primary transition-colors">notifications</span>
+</button>
+<button class="flex items-center gap-3 pl-2 pr-4 py-2 rounded-2xl bg-surface-light dark:bg-surface-dark hover:bg-white dark:hover:bg-white/10 transition-colors shadow-sm border border-transparent hover:border-border-light dark:hover:border-border-dark">
+<div class="size-9 rounded-full bg-gray-200 dark:bg-gray-700 bg-cover bg-center" data-alt="Portrait of a user named Sarah" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD0GHAGqZl6QOdxkyAPNypUPs6pkRZjqarmvFqLISaHUbnImjLiCwuFVeo-0i5RzqEPVhcIP0fkSO0JQA2jDalGU99TisMJSlZft82CVrcrqHsn9MBCO4yc13WBOQSM2EWd682dpkjLRt0tKgHMZLpbhOciDbGkRCul3U7ptDe74qFrD2V55T5PcGOnf1AM_dNalwVvQG-NURQMC9vB1z00ySmN-DmH8IdVajMVspJ555ml7SYNc2-gznGru4VNMRXzgWZzQKmuRYRB");'></div>
+<span class="text-sm font-semibold text-text-main dark:text-white-muted hidden sm:block">Sarah</span>
+</button>
+</div>
+</header>
+<div class="flex-1 overflow-y-auto p-4 md:p-8 space-y-10 scroll-smooth bg-background-light dark:bg-background-dark">
+<section class="max-w-7xl mx-auto w-full pt-2">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6">
+<div>
+<h1 class="text-4xl font-bold text-text-main dark:text-white-muted tracking-tight">Good Morning, Sarah</h1>
+<p class="text-text-muted dark:text-text-white-muted/80 mt-2 text-lg font-light">Here's what's happening in your jungle today.</p>
+</div>
+<div class="text-sm font-medium text-text-main dark:text-text-white-muted/80 bg-surface-light dark:bg-surface-dark px-5 py-3 rounded-xl shadow-sm border border-border-light dark:border-border-dark flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">wb_sunny</span>
+<span class="tracking-wide">24°C • 65% Humidity</span>
+</div>
+</div>
+</section>
+<section class="max-w-7xl mx-auto w-full pb-12">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+<h2 class="text-2xl font-bold text-text-main dark:text-white-muted">My Plants</h2>
+<div class="flex items-center gap-3 overflow-x-auto pb-2 sm:pb-0 no-scrollbar">
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-primary text-white dark:bg-primary text-sm font-semibold border border-transparent shadow-md shadow-primary/20">
+                            All
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-light dark:bg-surface-dark text-text-muted dark:text-white-muted text-sm font-medium border border-border-light dark:border-border-dark hover:border-primary hover:text-primary transition-all">
+                            Succulents
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-light dark:bg-surface-dark text-text-muted dark:text-white-muted text-sm font-medium border border-border-light dark:border-border-dark hover:border-primary hover:text-primary transition-all">
+                            Tropical
+                        </button>
+<button class="flex-shrink-0 px-5 py-2 rounded-full bg-surface-light dark:bg-surface-dark text-text-muted dark:text-white-muted text-sm font-medium border border-border-light dark:border-border-dark hover:border-primary hover:text-primary transition-all">
+                            Pet Safe
+                        </button>
+<div class="h-6 w-px bg-border-light dark:bg-border-dark mx-2 hidden sm:block"></div>
+<button class="flex-shrink-0 flex items-center gap-2 px-4 py-2 rounded-xl bg-transparent text-text-muted dark:text-text-white-muted/80 text-sm font-medium hover:bg-surface-light dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[18px]">sort</span>
+                            Sort
+                        </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+<div class="group bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-border-light/50 dark:border-border-dark/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Snake plant in a pot" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDXtuHeBdW08_dpDWwofr23SdvwTZp4WEnSf74qwryYcDddmJytqwtp_J3Q9OwaYMXiB8EgyEPxmfrEQHAuy8YkEtBaWo9EDD-9EuDih5vERSlShBd3GZj1Qx4c-ywr4sTDQApot3aS9IU_MgDIGqn506BE51xcuLaB6XATt_qF-co-Ib4CAcr5dPHPSCWYdmgCF6wX8teLk5-4YpygH1L5SMCvq8lQbi46SfIoWm6JMP5o3L6NJlnL-l2cLWWfE3iCEWliY3e3nr-v");'></div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-bold text-text-main dark:text-white-muted text-2xl tracking-tight">Snape</h3>
+</div>
+<p class="text-base text-text-muted dark:text-text-white-muted/80 italic mb-8 font-light tracking-wide">Sansevieria Trifasciata</p>
+<button class="w-full py-3.5 rounded-xl bg-[#E2E6DF] dark:bg-background-dark text-text-main dark:text-white-muted text-base font-semibold hover:bg-primary hover:text-white dark:hover:text-white transition-all duration-300 border border-transparent shadow-sm">
+                                View Details
+                            </button>
+</div>
+</div>
+<div class="group bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-border-light/50 dark:border-border-dark/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Rubber plant leaves" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuClixhd53g-GjR6lRVni_8BoUl9CEUCXiGqX_Pycs8WcTP2MT1qCY9SpmVtv_qgfYt3dqOstlby2Ooz4g_RS93y3_mRWZw9xBYeadPmEf5xeLJHP46ne4bjV77tWsKpIRn1nvH-2o6e8xryo8Lu98IFdV-b2cjOvYmV9V-FBSi4yShxPybchdVWfSjYEA4BSetsvOwD7iqizTzyVJHqPAQOymbTFvm2Vp-gdO33mGBIXjmQ5J78-0fi-Q1vKC-U6Ev_cL6w8HYtIduS");'></div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-bold text-text-main dark:text-white-muted text-2xl tracking-tight">Ruby</h3>
+</div>
+<p class="text-base text-text-muted dark:text-text-white-muted/80 italic mb-8 font-light tracking-wide">Ficus Elastica</p>
+<button class="w-full py-3.5 rounded-xl bg-[#E2E6DF] dark:bg-background-dark text-text-main dark:text-white-muted text-base font-semibold hover:bg-primary hover:text-white dark:hover:text-white transition-all duration-300 border border-transparent shadow-sm">
+                                View Details
+                            </button>
+</div>
+</div>
+<div class="group bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-border-light/50 dark:border-border-dark/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+<div class="absolute top-6 right-6 z-10">
+<span class="bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur text-text-main dark:text-white-muted text-[11px] font-bold px-3 py-1.5 rounded-full border border-border-light shadow-sm flex items-center gap-1.5 uppercase tracking-wide">
+<span class="size-2 rounded-full bg-green-500"></span> Healthy
+                                </span>
+</div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="String of Pearls plant hanging" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBuN8wAXUpn4dcMO_Lm8qatr-DbqeG562SI9NPJ1aUaY81Ez-4gsrjz8qvweT4VcBrW-7rqCiw9JN1nv80KtjwL_h9uoz4EKCJSOsE3Deqa7IW40DpjaVtCcNGMfIF_CK3T3jam1R6EbxM9qgsBAKLaYCk9WInyYu_oYU0thD2_VKS1y1LqNm4cHyRMg2gDMFsJ2u2iTfBKdxG_GJ2LgMm8O9Ca5N0Fn5RLxB0P04T8E9KrysdcGb0OTI5j9StCs9rp3jNc8oIeZtTh");'></div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-bold text-text-main dark:text-white-muted text-2xl tracking-tight">Pearl</h3>
+<button class="text-text-muted dark:text-text-white-muted/70 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</button>
+</div>
+<p class="text-base text-text-muted dark:text-text-white-muted/80 italic mb-8 font-light tracking-wide">Senecio Rowleyanus</p>
+<button class="w-full py-3.5 rounded-xl bg-[#E2E6DF] dark:bg-background-dark text-text-main dark:text-white-muted text-base font-semibold hover:bg-primary hover:text-white dark:hover:text-white transition-all duration-300 border border-transparent shadow-sm">
+                                View Details
+                            </button>
+</div>
+</div>
+<div class="group bg-surface-light dark:bg-surface-dark rounded-3xl overflow-hidden border border-border-light/50 dark:border-border-dark/50 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+<div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+<div class="absolute top-6 right-6 z-10">
+<span class="bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur text-text-main dark:text-white-muted text-[11px] font-bold px-3 py-1.5 rounded-full border border-border-light shadow-sm flex items-center gap-1.5 uppercase tracking-wide">
+<span class="size-2 rounded-full bg-yellow-500"></span> Dormant
+                                </span>
+</div>
+<div class="w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105" data-alt="Alocasia leaf dark background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAMlixseBPakxhH7BzdknjqK1ZHpkez6QOfEY5xypfjWz7xBsesx5_iMMPx4jNyelHLA6o_Mj7X3XomBz1wR1IE3wdK_WwhNtRKtwfeVGX5TdB0U2xKdvFBMiGje3hWJF9ulBlnnb2bICugofX4x9PZQ0vS2lUwGvBUNcH_zd1pTdcskNV3SP68m2bFV2tNeIiOMdBw5vOlypR60WwImeEZmB3HU1o5brPMHDrVWogo7ozZ2Xdqr_DlgnuxGw-t--rnYDnG6TkVHuVZ");'></div>
+</div>
+<div class="p-8">
+<div class="flex justify-between items-start mb-3">
+<h3 class="font-bold text-text-main dark:text-white-muted text-2xl tracking-tight">Drago</h3>
+<button class="text-text-muted dark:text-text-white-muted/70 hover:text-red-500 transition-colors">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</button>
+</div>
+<p class="text-base text-text-muted dark:text-text-white-muted/80 italic mb-8 font-light tracking-wide">Alocasia Polly</p>
+<button class="w-full py-3.5 rounded-xl bg-[#E2E6DF] dark:bg-background-dark text-text-main dark:text-white-muted text-base font-semibold hover:bg-primary hover:text-white dark:hover:text-white transition-all duration-300 border border-transparent shadow-sm">
+                                View Details
+                            </button>
+</div>
+</div>
+<div class="group flex flex-col items-center justify-center bg-transparent rounded-3xl border-2 border-dashed border-border-light dark:border-border-dark hover:border-primary dark:hover:border-primary cursor-pointer transition-colors min-h-[450px]">
+<div class="size-20 rounded-full bg-surface-light dark:bg-surface-dark border border-border-light dark:border-border-dark flex items-center justify-center mb-5 group-hover:scale-110 transition-transform shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl">add</span>
+</div>
+<p class="font-bold text-text-main dark:text-white-muted text-lg">Add New Plant</p>
+<p class="text-base text-text-muted dark:text-text-white-muted/80 mt-2">Grow your jungle</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
