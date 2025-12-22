@@ -14,15 +14,15 @@ const navItems: NavItem[] = [
   {
     label: "My Plants",
     icon: "potted_plant",
-    to: "/?view=collection",
-    isActive: (_, searchParams) => searchParams.get("view") === "collection",
+    to: "/",
+    isActive: (pathname, searchParams) =>
+      pathname === "/" && searchParams.get("view") !== "wishlist",
   },
   {
     label: "Wishlist",
     icon: "favorite",
-    to: "/",
-    isActive: (pathname, searchParams) =>
-      pathname === "/" && !searchParams.get("view"),
+    to: "/?view=wishlist",
+    isActive: (_, searchParams) => searchParams.get("view") === "wishlist",
   },
   {
     label: "Settings",

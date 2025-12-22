@@ -24,8 +24,8 @@ export default function Index() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { profile, user } = useUser();
 
-  // Read view mode and search from URL
-  const view = searchParams.get("view") || "searches";
+  // Read view mode and search from URL - default to "collection" (My Plants)
+  const view = searchParams.get("view") || "collection";
   const searchValue = searchParams.get("search") || "";
   const userName = profile?.display_name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
 
@@ -56,7 +56,7 @@ export default function Index() {
     filters: {
       ...filters,
       search: searchValue || undefined,
-      bought: view === "collection",
+      bought: view !== "wishlist",
     },
     sort,
   });
