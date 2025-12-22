@@ -55,7 +55,7 @@ export function Sidebar({ className }: SidebarProps) {
             <MaterialIcon name="eco" className="text-white" size="md" />
           </div>
           <span className="font-bold text-xl text-woodland-text-main">
-            Garden Gazer
+            Villa Jordaan
           </span>
         </Link>
       </div>
