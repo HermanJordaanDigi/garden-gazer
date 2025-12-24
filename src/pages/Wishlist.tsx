@@ -40,8 +40,8 @@ export default function Index() {
     field: "common_name" | "price" | "id";
     direction: "asc" | "desc";
   }>({
-    field: "common_name",
-    direction: "asc",
+    field: "id",
+    direction: "desc",
   });
 
   const { ref: loadMoreRef, inView } = useInView();

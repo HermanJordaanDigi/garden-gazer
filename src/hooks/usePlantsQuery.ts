@@ -26,7 +26,7 @@ const PAGE_SIZE = 20;
 
 export function usePlantsQuery({ 
   filters = {}, 
-  sort = { field: 'common_name', direction: 'asc' },
+  sort = { field: 'id', direction: 'desc' },
   pageSize = PAGE_SIZE 
 }: UsePlantsQueryOptions = {}) {
   
