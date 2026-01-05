@@ -24,13 +24,6 @@ const navItems: NavItem[] = [
     to: "/?view=wishlist",
     isActive: (_, searchParams) => searchParams.get("view") === "wishlist",
   },
-  {
-    label: "Settings",
-    icon: "settings",
-    to: "#",
-    isActive: () => false,
-    disabled: true,
-  },
 ];
 
 interface SidebarProps {
@@ -65,23 +58,18 @@ export function Sidebar({ className }: SidebarProps) {
         <ul className="space-y-1">
           {navItems.map((item) => {
             const isActive = item.isActive(location.pathname, searchParams);
-            const isDisabled = item.disabled;
 
             return (
               <li key={item.label}>
                 <Link
-                  to={isDisabled ? "#" : item.to}
+                  to={item.to}
                   className={cn(
                     "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
                     isActive &&
                       "bg-woodland-primary/15 text-woodland-text-main font-medium",
                     !isActive &&
-                      !isDisabled &&
-                      "text-woodland-text-muted hover:bg-woodland-background-light",
-                    isDisabled &&
-                      "text-woodland-text-muted/50 cursor-not-allowed opacity-60"
+                      "text-woodland-text-muted hover:bg-woodland-background-light"
                   )}
-                  onClick={(e) => isDisabled && e.preventDefault()}
                 >
                   <MaterialIcon
                     name={item.icon}
@@ -97,19 +85,18 @@ export function Sidebar({ className }: SidebarProps) {
               </li>
             );
           })}
+          {/* Add Plant Button */}
+          <li>
+            <Link
+              to="/add-plant"
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-woodland-text-muted hover:bg-woodland-background-light transition-colors"
+            >
+              <MaterialIcon name="add" className="text-woodland-text-muted" />
+              <span>Add Plant</span>
+            </Link>
+          </li>
         </ul>
       </nav>
-
-      {/* Add Plant Button */}
-      <div className="p-4 border-t border-woodland-border-light">
-        <Link
-          to="/add-plant"
-          className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-woodland-primary text-white font-medium hover:bg-woodland-primary/90 transition-colors"
-        >
-          <MaterialIcon name="add" size="md" />
-          <span>Add Plant</span>
-        </Link>
-      </div>
     </aside>
   );
 }
