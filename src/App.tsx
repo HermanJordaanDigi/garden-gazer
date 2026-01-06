@@ -10,6 +10,7 @@ import { UserProvider } from "@/contexts/UserContext";
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const PlantDetail = lazy(() => import("./pages/PlantDetail"));
 const AddPlant = lazy(() => import("./pages/AddPlant"));
+const Settings = lazy(() => import("./pages/Settings"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Auth = lazy(() => import("./pages/Auth"));
 
@@ -51,6 +52,7 @@ const App = () => (
                 <Route path="/" element={<Wishlist />} />
                 <Route path="/plant/:id" element={<PlantDetail />} />
                 <Route path="/add-plant" element={<AddPlant />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/auth" element={<Auth />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

@@ -95,6 +95,29 @@ export function Sidebar({ className }: SidebarProps) {
               <span>Add Plant</span>
             </Link>
           </li>
+          {/* Settings */}
+          <li>
+            <Link
+              to="/settings"
+              className={cn(
+                "flex items-center gap-3 px-4 py-3 rounded-xl transition-colors",
+                location.pathname === "/settings"
+                  ? "bg-woodland-primary/15 text-woodland-text-main font-medium"
+                  : "text-woodland-text-muted hover:bg-woodland-background-light"
+              )}
+            >
+              <MaterialIcon
+                name="settings"
+                filled={location.pathname === "/settings"}
+                className={cn(
+                  location.pathname === "/settings"
+                    ? "text-woodland-primary"
+                    : "text-woodland-text-muted"
+                )}
+              />
+              <span>Settings</span>
+            </Link>
+          </li>
         </ul>
       </nav>
     </aside>
