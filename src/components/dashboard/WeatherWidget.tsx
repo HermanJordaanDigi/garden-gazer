@@ -1,8 +1,16 @@
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { useWeather, getWeatherIcon } from "@/hooks/useWeather";
+import { useUser } from "@/contexts/UserContext";
 
 export function WeatherWidget() {
-  const { data: weather, isLoading, isError } = useWeather();
+  const { profile } = useUser();
+  
+  // Cast to access new columns (types may not be updated yet)
+  const p = profile as typeof profile & { garden_latitude?: number; garden_longitude?: number };
+  const latitude = p?.garden_latitude ?? -33.9249;
+  const longitude = p?.garden_longitude ?? 18.4241;
+  
+  const { data: weather, isLoading, isError } = useWeather(latitude, longitude);
 
   if (isLoading) {
     return (
@@ -34,13 +42,23 @@ export function WeatherWidget() {
   const iconColorClass = weather.isDay ? "text-amber-500" : "text-indigo-400";
 
   return (
-    <div className="flex items-center gap-4 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light">
+    <div className="flex items-center gap-6 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light">
       <div className={`flex items-center justify-center w-12 h-12 rounded-full ${iconBgClass}`}>
         <MaterialIcon name={iconName} className={iconColorClass} size="xl" />
       </div>
       <div className="flex flex-col">
         <span className="text-2xl font-semibold text-woodland-text-main">{weather.temperature}°C</span>
         <span className="text-sm text-woodland-text-muted">Humidity: {weather.humidity}%</span>
+      </div>
+      <div className="flex gap-4 text-sm text-woodland-text-muted">
+        <div className="flex items-center gap-1">
+          <MaterialIcon name="wb_sunny" size="sm" className="text-amber-500" />
+          <span>{weather.sunrise}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <MaterialIcon name="nights_stay" size="sm" className="text-indigo-400" />
+          <span>{weather.sunset}</span>
+        </div>
       </div>
     </div>
   );

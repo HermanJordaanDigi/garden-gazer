@@ -5,6 +5,8 @@ interface WeatherData {
   humidity: number;
   weatherCode: number;
   isDay: boolean;
+  sunrise: string;
+  sunset: string;
 }
 
 interface WeatherResponse {
@@ -13,6 +15,10 @@ interface WeatherResponse {
     relative_humidity_2m: number;
     weather_code: number;
     is_day: number;
+  };
+  daily: {
+    sunrise: string[];
+    sunset: string[];
   };
 }
 
@@ -39,12 +45,17 @@ export function getWeatherDescription(code: number): string {
   return "Cloudy";
 }
 
+function formatTime(isoString: string): string {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
 async function fetchWeather(
   latitude: number,
   longitude: number
 ): Promise<WeatherData> {
   const response = await fetch(
-    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,is_day`
+    `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,is_day&daily=sunrise,sunset&timezone=auto`
   );
 
   if (!response.ok) {
@@ -58,6 +69,8 @@ async function fetchWeather(
     humidity: Math.round(data.current.relative_humidity_2m),
     weatherCode: data.current.weather_code,
     isDay: data.current.is_day === 1,
+    sunrise: formatTime(data.daily.sunrise[0]),
+    sunset: formatTime(data.daily.sunset[0]),
   };
 }
 

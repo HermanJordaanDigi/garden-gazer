@@ -74,6 +74,8 @@ export type Database = {
           created_at: string
           display_name: string | null
           email: string | null
+          garden_latitude: number | null
+          garden_longitude: number | null
           id: string
           updated_at: string
         }
@@ -82,6 +84,8 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email?: string | null
+          garden_latitude?: number | null
+          garden_longitude?: number | null
           id: string
           updated_at?: string
         }
@@ -90,6 +94,8 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           email?: string | null
+          garden_latitude?: number | null
+          garden_longitude?: number | null
           id?: string
           updated_at?: string
         }
