@@ -1,9 +1,11 @@
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { useWeather, getWeatherIcon } from "@/hooks/useWeather";
 import { useUser } from "@/contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export function WeatherWidget() {
   const { profile } = useUser();
+  const navigate = useNavigate();
   
   // Cast to access new columns (types may not be updated yet)
   const p = profile as typeof profile & { garden_latitude?: number; garden_longitude?: number };
@@ -11,6 +13,10 @@ export function WeatherWidget() {
   const longitude = p?.garden_longitude ?? 18.4241;
   
   const { data: weather, isLoading, isError } = useWeather(latitude, longitude);
+
+  const handleClick = () => {
+    navigate("/weather");
+  };
 
   if (isLoading) {
     return (
@@ -42,7 +48,10 @@ export function WeatherWidget() {
   const iconColorClass = weather.isDay ? "text-amber-500" : "text-indigo-400";
 
   return (
-    <div className="flex items-center gap-6 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light">
+    <div 
+      onClick={handleClick}
+      className="flex items-center gap-6 bg-woodland-surface-light rounded-xl px-5 py-4 shadow-sm border border-woodland-border-light cursor-pointer hover:border-woodland-primary hover:shadow-md transition-all"
+    >
       <div className={`flex items-center justify-center w-12 h-12 rounded-full ${iconBgClass}`}>
         <MaterialIcon name={iconName} className={iconColorClass} size="xl" />
       </div>
@@ -60,6 +69,7 @@ export function WeatherWidget() {
           <span>{weather.sunset}</span>
         </div>
       </div>
+      <MaterialIcon name="chevron_right" size="md" className="text-woodland-text-muted ml-auto" />
     </div>
   );
 }
