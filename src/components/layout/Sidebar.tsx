@@ -21,8 +21,8 @@ const navItems: NavItem[] = [
   {
     label: "Wishlist",
     icon: "favorite",
-    to: "/?view=wishlist",
-    isActive: (_, searchParams) => searchParams.get("view") === "wishlist",
+    to: "/wishlist",
+    isActive: (pathname) => pathname === "/wishlist",
   },
 ];
 
