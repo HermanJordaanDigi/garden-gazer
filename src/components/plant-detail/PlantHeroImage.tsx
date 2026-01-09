@@ -1,4 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Plant } from "@/types/plant";
 import { MaterialIcon } from "@/components/ui/MaterialIcon";
 import { getPlantInitials } from "@/lib/plant-utils";
@@ -26,11 +29,13 @@ export function PlantHeroImage({
   onUpload,
   isUploading = false,
 }: PlantHeroImageProps) {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [imageUrl, setImageUrl] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const imageCount = plant.images?.length || 0;
 
@@ -78,12 +83,65 @@ export function PlantHeroImage({
   const handleSubmit = async () => {
     if (selectedFile) {
       await onUpload("", selectedFile);
-    } else if (imageUrl.trim()) {
-      await onUpload(imageUrl.trim());
     }
     setIsDialogOpen(false);
     setSelectedFile(null);
-    setImageUrl("");
+  };
+
+  const handleGenerateImage = async () => {
+    setIsGenerating(true);
+    toast.info("Generating botanical illustration...", { id: "generate-image" });
+
+    try {
+      const response = await fetch(
+        "https://jordaandigi.app.n8n.cloud/webhook/gen-botanical-image",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify([
+            {
+              id: plant.id,
+              scientific_name: plant.scientific_name,
+              common_name: plant.common_name,
+              native_region: plant.native_region,
+              type: plant.type,
+              soil_type: plant.soil_type,
+              sun_exposure: plant.sun_exposure,
+              wind_tolerance: plant.wind_tolerance,
+              growth_habit: plant.growth_habit,
+              mature_height_width: plant.mature_height_width,
+              flowering_season: plant.flowering_season,
+              flower_colour: plant.flower_colour,
+              images: plant.images,
+              bought: plant.bought,
+              price: plant.price,
+            },
+          ]),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to generate image");
+      }
+
+      toast.success("Botanical illustration generated!", { id: "generate-image" });
+
+      // Invalidate queries to refresh the plant data
+      queryClient.invalidateQueries({ queryKey: ["plant", plant.id] });
+      queryClient.invalidateQueries({ queryKey: ["plants"] });
+
+      setIsDialogOpen(false);
+
+      // Navigate to refresh the page with the new image
+      navigate(`/plant/${plant.id}`);
+    } catch (error) {
+      toast.error("Failed to generate image. Please try again.", { id: "generate-image" });
+      console.error("Generation error:", error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -159,7 +217,6 @@ export function PlantHeroImage({
               className={`absolute shadow-lg bg-white/90 hover:bg-white ${
                 imageCount > 1 ? "top-3 left-3" : "bottom-3 right-3"
               }`}
-              onClick={() => setImageUrl(plant.images?.[currentImageIndex] || "")}
             >
               <MaterialIcon name="add_photo_alternate" size="md" />
             </Button>
@@ -183,7 +240,6 @@ export function PlantHeroImage({
                     const file = e.target.files?.[0];
                     if (file) {
                       setSelectedFile(file);
-                      setImageUrl("");
                     }
                   }}
                   className="cursor-pointer"
@@ -196,12 +252,12 @@ export function PlantHeroImage({
               </div>
 
               {/* Preview Section */}
-              {(previewUrl || imageUrl) && (
+              {previewUrl && (
                 <div className="grid gap-2">
                   <Label>Preview</Label>
                   <div className="relative h-48 bg-muted rounded-md overflow-hidden">
                     <img
-                      src={previewUrl || imageUrl}
+                      src={previewUrl}
                       alt="Preview"
                       className="w-full h-full object-cover"
                       onError={(e) => {
@@ -212,21 +268,38 @@ export function PlantHeroImage({
                 </div>
               )}
 
-              {/* URL Input Fallback */}
+              {/* Divider */}
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-woodland-border-light" />
+                </div>
+              </div>
+
+              {/* Generate AI Image */}
               <div className="grid gap-2">
-                <Label htmlFor="image-url">Or enter image URL</Label>
-                <Input
-                  id="image-url"
-                  placeholder="https://example.com/image.jpg"
-                  value={imageUrl}
-                  onChange={(e) => {
-                    setImageUrl(e.target.value);
-                    if (e.target.value) {
-                      setSelectedFile(null);
-                    }
-                  }}
-                  disabled={!!selectedFile}
-                />
+                <Label>Generate with AI</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleGenerateImage}
+                  disabled={isGenerating}
+                  className="w-full border-woodland-primary text-woodland-primary hover:bg-woodland-primary/10"
+                >
+                  {isGenerating ? (
+                    <>
+                      <MaterialIcon name="progress_activity" className="mr-2 animate-spin" size="sm" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <MaterialIcon name="auto_awesome" className="mr-2" size="sm" />
+                      Generate Botanical Illustration
+                    </>
+                  )}
+                </Button>
+                <p className="text-xs text-woodland-text-muted">
+                  Uses AI to create a botanical illustration for {plant.common_name || plant.scientific_name}
+                </p>
               </div>
             </div>
             <DialogFooter>
@@ -235,13 +308,12 @@ export function PlantHeroImage({
                 onClick={() => {
                   setIsDialogOpen(false);
                   setSelectedFile(null);
-                  setImageUrl("");
                 }}
               >
                 Cancel
               </Button>
-              <Button onClick={handleSubmit} disabled={isUploading}>
-                {isUploading ? "Uploading..." : "Update Image"}
+              <Button onClick={handleSubmit} disabled={isUploading || !selectedFile}>
+                {isUploading ? "Uploading..." : "Upload Image"}
               </Button>
             </DialogFooter>
           </DialogContent>
