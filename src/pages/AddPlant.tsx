@@ -44,6 +44,9 @@ export default function AddPlant() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     
+    // Show immediate feedback that submission is in progress
+    toast.info("Submitting plant...", { id: "plant-submit" });
+
     try {
       const response = await fetch("https://jordaandigi.app.n8n.cloud/webhook/text_input", {
         method: "POST",
@@ -60,13 +63,19 @@ export default function AddPlant() {
         throw new Error("Failed to submit");
       }
 
-      toast.success("Plant submitted successfully!");
+      const result = await response.json();
+
       form.reset();
-      
-      // Optional: Navigate back after a short delay
-      setTimeout(() => {
+
+      // Show success and navigate to the new plant
+      const plantName = result.plant?.common_name || result.plant?.scientific_name || "Plant";
+      toast.success(`${plantName} added to your collection!`, { id: "plant-submit" });
+
+      if (result.plant?.id) {
+        navigate(`/plant/${result.plant.id}`);
+      } else {
         navigate("/");
-      }, 1500);
+      }
       
     } catch (error) {
       toast.error("Failed to submit plant. Please try again.");
