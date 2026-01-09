@@ -66,7 +66,7 @@ export function Header({ onMenuClick, className }: HeaderProps) {
         </Button>
 
         {/* Search Input */}
-        <div className="flex-1 max-w-md relative">
+        <div className="flex-1 md:flex-initial md:w-80 relative">
           <MaterialIcon
             name="search"
             className="absolute left-3 top-1/2 -translate-y-1/2 text-woodland-text-muted"
@@ -74,15 +74,15 @@ export function Header({ onMenuClick, className }: HeaderProps) {
           />
           <Input
             type="text"
-            placeholder="Search your plants..."
+            placeholder="Search..."
             value={searchValue}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="pl-10 bg-white border-woodland-border-light focus:border-woodland-primary focus:ring-woodland-primary/20"
           />
         </div>
 
-        {/* Spacer */}
-        <div className="flex-1" />
+        {/* Spacer - hidden on mobile */}
+        <div className="hidden md:block flex-1" />
 
         {/* Right Side Actions */}
         <div className="flex items-center gap-2">
