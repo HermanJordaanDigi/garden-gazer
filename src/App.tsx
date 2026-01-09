@@ -51,7 +51,6 @@ const App = () => (
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Wishlist />} />
-                <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/plant/:id" element={<PlantDetail />} />
                 <Route path="/add-plant" element={<AddPlant />} />
                 <Route path="/settings" element={<Settings />} />
