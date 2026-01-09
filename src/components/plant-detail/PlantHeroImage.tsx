@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plant } from "@/types/plant";
@@ -29,7 +28,6 @@ export function PlantHeroImage({
   onUpload,
   isUploading = false,
 }: PlantHeroImageProps) {
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -128,14 +126,11 @@ export function PlantHeroImage({
 
       toast.success("Botanical illustration generated!", { id: "generate-image" });
 
-      // Invalidate queries to refresh the plant data
-      queryClient.invalidateQueries({ queryKey: ["plant", plant.id] });
-      queryClient.invalidateQueries({ queryKey: ["plants"] });
-
       setIsDialogOpen(false);
 
-      // Navigate to refresh the page with the new image
-      navigate(`/plant/${plant.id}`);
+      // Refetch the plant data to show the new image
+      await queryClient.refetchQueries({ queryKey: ["plant", plant.id] });
+      queryClient.invalidateQueries({ queryKey: ["plants"] });
     } catch (error) {
       toast.error("Failed to generate image. Please try again.", { id: "generate-image" });
       console.error("Generation error:", error);
