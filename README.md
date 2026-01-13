@@ -1,73 +1,76 @@
-# Welcome to your Lovable project
+# Plant Library (AI-Enriched Garden Database)
 
-## Project info
+A personal plant library that turns a simple plant name (as written on a nursery pot sticker) into a complete, enriched plant profile. The app uses an **n8n AI backend** to automatically research the plant species and populate key characteristics, care guidance, and useful metadata—so you don’t have to manually look everything up.
 
-**URL**: https://lovable.dev/projects/75c5b3b7-f093-4a74-b23f-8e5b2fa25243
+It also includes photo/illustration support and a weather widget tied to your garden’s exact coordinates.
 
-## How can I edit this code?
+## What the app does
 
-There are several ways of editing your application.
+### 1) Fast plant onboarding (name → full profile)
+- You enter a plant name (from the pot label)
+- The n8n backend orchestrates AI research/enrichment
+- The plant profile is automatically populated with relevant plant information
 
-**Use Lovable**
+### 2) Searchable plant library
+- All plants are viewable in a library/gallery
+- Search and filter to quickly find the plant you’re looking for
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/75c5b3b7-f093-4a74-b23f-8e5b2fa25243) and start prompting.
+### 3) Profile images (photo or AI illustration)
+Each plant profile can include:
+- A real **photo** taken by the user (for accurate identification/records), and/or
+- An AI-generated **botanical illustration** (useful as a placeholder until you take a photo later)
 
-Changes made via Lovable will be committed automatically to this repo.
+### 4) Garden weather widget
+- Weather widget is set to the garden’s **exact latitude/longitude**
+- Includes a **7-day forecast** to support watering, planting, and maintenance decisions
 
-**Use your preferred IDE**
+## Typical plant profile data (examples)
+The enrichment pipeline can populate fields like:
+- Scientific name / common name
+- Sunlight requirements
+- Watering needs
+- Soil preferences
+- Growth habit / size (mature height/spread)
+- Hardiness / climate notes
+- Toxicity (pets/people), if relevant
+- Seasonal interest (flowers, fruit, foliage)
+- Notes / tags
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+_(Exact fields depend on your chosen schema and backend sources.)_
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Who it’s for
+- Home gardeners who want a structured, searchable plant database
+- People building a garden plan over time and want consistent care info in one place
+- Anyone who wants “minimal input, maximum structure” for plant tracking
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
+## Tech stack
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- n8n (AI enrichment + orchestration)
 
-## How can I deploy this project?
+## Getting started (local development)
 
-Simply open [Lovable](https://lovable.dev/projects/75c5b3b7-f093-4a74-b23f-8e5b2fa25243) and click on Share -> Publish.
+### Prerequisites
+- Node.js + npm (recommended: install via nvm)
 
-## Can I connect a custom domain to my Lovable project?
+### Install & run
+```sh
+# 1) Clone the repository
+git clone <YOUR_GIT_URL>
 
-Yes, you can!
+# 2) Enter the project folder
+cd <YOUR_PROJECT_NAME>
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+# 3) Install dependencies
+npm i
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+# 4) Start the dev server
+npm run dev
+```
+Build
+``` sh
+npm run build
+```
